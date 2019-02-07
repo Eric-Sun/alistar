@@ -8,11 +8,11 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static2/bootstrap/css/bootstrap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/static2/dist/css/AdminLTE.min.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="/static2/plugins/iCheck/square/blue.css">
 
 </head>
 <body class="hold-transition login-page">
@@ -58,9 +58,9 @@
 <!-- /.login-box -->
 
 <!-- jQuery 2.2.3 -->
-<script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="/static2/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static2/bootstrap/js/bootstrap.min.js"></script>
 <!-- iCheck -->
 <#--<script src="../../plugins/iCheck/icheck.min.js"></script>-->
 <script>

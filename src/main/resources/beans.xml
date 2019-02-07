@@ -10,7 +10,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <import resource="dataSource.xml"/>
     <mvc:annotation-driven/>
-    <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/static/**" location="static2"/>
 
     <context:annotation-config/>
     <!-- 把标记了@Controller注解的类转换为bean -->
