@@ -6,6 +6,7 @@ import com.j13.evelynn.vos.BarVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,7 +22,7 @@ public class BarController {
 
 
     @RequestMapping("/list")
-    public String userList(HttpServletRequest request, Map<String, Object> model) {
+    public String list(HttpServletRequest request, Map<String, Object> model) {
         int pageNum = 0;
         if (model.get("pageNum") != null) {
             pageNum = (Integer) model.get("pageNum");
@@ -30,6 +31,27 @@ public class BarController {
         List<BarVO> barList = barServerManager.barList(pageNum);
         model.put("data", barList);
         return "/bar/list";
+    }
+
+    @RequestMapping("/preCreate")
+    public String preCreate(HttpServletRequest request, Map<String, Object> model) {
+        return "bar/create";
+    }
+
+    @RequestMapping("/create")
+    public String create(HttpServletRequest request,
+                         @RequestParam(name = "name") String name,
+                         @RequestParam(name = "userId") Integer userId) {
+        barServerManager.createBar(name, userId);
+        return "forward:/bar/list";
+    }
+
+    @RequestMapping("/delete")
+    public String delete(@RequestParam(name = "barId") Integer barId) {
+
+        barServerManager.delete(barId);
+
+        return "forward:/bar/list";
     }
 
 

@@ -9,12 +9,12 @@
 
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">吧列表</h3>
+                        <h3 class="box-title">吧名称：${barName}</h3>
                     </div>
                     <div class="box-body">
                         <button class="btn btn-info btn-sm right"
-                                onclick="javascript:location.href='/bar/preCreate'">
-                            创建新吧
+                                onclick="javascript:location.href='/post/preCreate'">
+                            创建新帖子
                         </button>
                     </div>
                     <!-- /.box-header -->
@@ -22,9 +22,9 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>吧id</th>
-                                <th>吧名称</th>
-                                <th>吧主昵称</th>
+                                <th>帖子id</th>
+                                <th>发帖人</th>
+                                <th>帖子内容</th>
                                 <th>创建时间</th>
                                 <th>删除</th>
                             </tr>
@@ -32,13 +32,13 @@
                             <tbody>
                                 <#list data as item>
                                 <tr>
-                                    <td>${item.barId}</td>
-                                    <td><a onclick="javascript:location.href='/post/list?barId=${item.barId}'">${item.name}</a></td>
+                                    <td>${item.postId}</td>
                                     <td>${item.userName}</td>
+                                    <td>${item.content}</td>
                                     <td>${item.createtime}</td>
                                     <td>
                                         <button class="btn btn-info btn-sm right"
-                                                onclick="javascript:location.href='/bar/delete?barId=${item.barId}'">
+                                                onclick="javascript:location.href='/post/delete?postId=${item.postId}'">
                                             删除
                                         </button>
                                     </td>
