@@ -9,7 +9,14 @@
 
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <import resource="dataSource.xml"/>
-    <mvc:annotation-driven/>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
     <mvc:resources mapping="/static/**" location="static2"/>
 
     <context:annotation-config/>
@@ -33,6 +40,7 @@
                 <prop key="number_format">,###.##</prop>
                 <prop key="classic_compatible">true</prop>
                 <prop key="defaultEncoding">UTF-8</prop>
+
             </props>
         </property>
     </bean>
@@ -42,6 +50,7 @@
         <property name="suffix" value=".ftl"/>
         <property name="contentType" value="text/html;charset=UTF-8"/>
         <property name="exposeRequestAttributes" value="true"/>
+        <property name="allowSessionOverride" value="true"/>
     </bean>
 
     <bean id="multipartResolver"

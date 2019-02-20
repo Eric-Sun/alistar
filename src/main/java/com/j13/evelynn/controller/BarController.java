@@ -1,5 +1,6 @@
 package com.j13.evelynn.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.j13.evelynn.net.BarServerManager;
 import com.j13.evelynn.security.model.Account;
 import com.j13.evelynn.vos.BarVO;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -23,14 +25,15 @@ public class BarController {
 
     @RequestMapping("/list")
     public String list(HttpServletRequest request, Map<String, Object> model) {
-        int pageNum = 0;
-        if (model.get("pageNum") != null) {
-            pageNum = (Integer) model.get("pageNum");
-        }
-
-        List<BarVO> barList = barServerManager.barList(pageNum);
-        model.put("data", barList);
         return "/bar/list";
+    }
+
+    @RequestMapping("/getBarList")
+    @ResponseBody
+    public String getBarList() {
+        int pageNum = 0;
+        List<BarVO> barList = barServerManager.barList(pageNum);
+        return JSON.toJSONString(barList);
     }
 
     @RequestMapping("/preCreate")
@@ -47,11 +50,9 @@ public class BarController {
     }
 
     @RequestMapping("/delete")
+    @ResponseBody
     public String delete(@RequestParam(name = "barId") Integer barId) {
-
-        barServerManager.delete(barId);
-
-        return "forward:/bar/list";
+        return JSON.toJSONString(barServerManager.delete(barId));
     }
 
 

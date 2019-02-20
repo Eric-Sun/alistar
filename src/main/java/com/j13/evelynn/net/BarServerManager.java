@@ -51,12 +51,12 @@ public class BarServerManager extends BaseServerManager {
     }
 
 
-    public void delete(int barId) {
+    public CommonResultResp delete(int barId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.bar.delete");
         params.put("barId", barId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
-        CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
+        return JSON.parseObject(rawResponse, CommonResultResp.class);
     }
 }
