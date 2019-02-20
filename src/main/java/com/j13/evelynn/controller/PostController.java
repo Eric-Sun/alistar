@@ -38,19 +38,14 @@ public class PostController {
         return JSON.toJSONString(data);
     }
 
-    @RequestMapping("/preCreate")
-    public String preCreate(@RequestParam(name = "barId") String barId, Map<String, Object> model) {
-        model.put("barId", barId);
-        return "/post/create";
-    }
-
     @RequestMapping("/create")
+    @ResponseBody
     public String create(@RequestParam(name = "userId") int userId,
                          @RequestParam(name = "content") String content,
                          @RequestParam(name = "barId") String barId,
                          Map<String, Object> model) {
-        postServerManager.create(barId, userId, content);
-        return "forward:/post/list?barId=" + barId;
+        return JSON.toJSONString(postServerManager.create(barId, userId, content));
+
     }
 
     @RequestMapping("/delete")
@@ -71,11 +66,12 @@ public class PostController {
     }
 
     @RequestMapping("/update")
-    public String update(@RequestParam(name = "barId") int barId,
-                         @RequestParam(name = "postId") int postId,
-                         @RequestParam(name = "content") String content) {
+    @ResponseBody
+    public String update(
+            @RequestParam(name = "postId") int postId,
+            @RequestParam(name = "content") String content) {
         postServerManager.update(postId, content);
-        return "forward:/post/list?barId=" + barId;
+        return "{}";
     }
 
 
@@ -91,9 +87,5 @@ public class PostController {
         return JSON.toJSONString(post);
     }
 
-    @RequestMapping("/getReplyList")
-    @ResponseBody
-    public String getReplyList(@RequestParam(name = "postId") int postId){
-        return JSON.toJSONString(replyServerManager.list(postId));
-    }
+
 }

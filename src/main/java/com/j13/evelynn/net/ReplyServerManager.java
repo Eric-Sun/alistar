@@ -6,11 +6,9 @@ import com.google.common.collect.Maps;
 import com.j13.evelynn.util.InternetUtil;
 import com.j13.evelynn.vos.BarVO;
 import com.j13.evelynn.vos.ReplyVO;
+import com.j13.poppy.core.CommonResultResp;
 import com.j13.poppy.util.BeanUtils;
-import com.j13.ryze.api.resp.AdminBarDetailResp;
-import com.j13.ryze.api.resp.AdminBarListResp;
-import com.j13.ryze.api.resp.AdminReplyDetailResp;
-import com.j13.ryze.api.resp.AdminReplyListResp;
+import com.j13.ryze.api.resp.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -41,4 +39,48 @@ public class ReplyServerManager extends BaseServerManager {
         return list;
     }
 
+    public AdminReplyDetailResp get(int replyId) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.reply.detail");
+        params.put("replyId", replyId);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        AdminReplyDetailResp resp = JSON.parseObject(rawResponse, AdminReplyDetailResp.class);
+        return resp;
+    }
+
+    public Object create(int barId, int postId, int userId, int content) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.reply.add");
+        params.put("postId", postId);
+        params.put("userId", userId);
+        params.put("content", content);
+        params.put("barId", barId);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        AdminReplyAddResp resp = JSON.parseObject(rawResponse, AdminReplyAddResp.class);
+        return resp.getReplyId();
+    }
+
+    public CommonResultResp delete(int replyId) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.reply.delete");
+        params.put("replyId", replyId);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
+        return resp;
+    }
+
+    public Object update(int replyId, int userId, int content) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.reply.updateContent");
+        params.put("replyId", replyId);
+        params.put("userId", userId);
+        params.put("content", content);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
+        return resp;
+    }
 }

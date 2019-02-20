@@ -7,19 +7,18 @@
     <div class="row">
         <div class="col-xs-12">
 
-            <div class="box">
+            <div id="tb" class="box">
                 <div class="box-header">
                     <h3 class="box-title">吧列表</h3>
                 </div>
                 <div class="box-body">
-                    <button class="btn btn-info btn-sm right"
-                            onclick="javascript:location.href='/bar/preCreate'">
+                    <button class="btn btn-info btn-sm right" v-on:click="showCreateBarModal()">
                         创建新吧
                     </button>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive">
-                    <table id="tb" class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
                             <th>吧id</th>
@@ -57,8 +56,69 @@
 <!-- /.content -->
 </@layout.mainLayout>
 
+<div class="modal fade" id="createBarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form @submit.prevent="createBarSubmit" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">创建BAR</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="input-group margin">
+
+                        <div class="form-group form-inline">
+                            <label>吧名称</label>
+                            <input type="text" class="form-control" name="name" v-model="barName"/>
+                        </div>
+                        <div class="form-group form-inline">
+                            <label>吧主id</label>
+                            <input type="text" class="form-control" name="userId" v-model="userId"/>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default">创建</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
+
+    var modal = new Vue({
+                el: "#createBarModal",
+                data: {
+                    barName: "",
+                    userId: ""
+                },
+                created: function () {
+                },
+                methods: {
+                    createBarSubmit: function () {
+                        $.ajax({
+                            url: "/bar/create",
+                            data: {
+                                name: this.barName,
+                                userId: this.userId
+                            },
+                            success: function (data) {
+                                alert("创建成功");
+                                $("#createBarModal").modal('hide');
+                                tb.$options.methods.loadData();
+                            }
+                        });
+                    }
+                }
+            })
+            ;
 
     var tb = new Vue({
                 el: "#tb",
@@ -66,17 +126,19 @@
                     barList: []
                 },
                 created: function () {
-                    var _self = this;
-                    $.ajax({
-                        url: "/bar/getBarList",
-                        dataType: 'json',
-                        success: function (data) {
-                            _self.barList = data;
-                        }
-                    })
-
+                    this.loadData();
                 },
                 methods: {
+                    loadData: function () {
+                        var _self = this;
+                        $.ajax({
+                            url: "/bar/getBarList",
+                            dataType: 'json',
+                            success: function (data) {
+                                Vue.set(tb, "barList", data);
+                            }
+                        })
+                    },
                     navToPostList: function (index) {
                         var barId = this.barList[index].barId;
                         window.location.href = "/post/list?barId=" + barId;
@@ -95,6 +157,9 @@
                                 alert("成功");
                             }
                         })
+                    },
+                    showCreateBarModal: function () {
+                        $('#createBarModal').modal()
                     }
 
                 }

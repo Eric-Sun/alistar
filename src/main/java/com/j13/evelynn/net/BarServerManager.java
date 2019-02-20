@@ -40,7 +40,7 @@ public class BarServerManager extends BaseServerManager {
     }
 
 
-    public void createBar(String barName, int userId) {
+    public int createBar(String barName, int userId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.bar.add");
         params.put("name", barName);
@@ -48,6 +48,7 @@ public class BarServerManager extends BaseServerManager {
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         AdminBarAddResp resp = JSON.parseObject(rawResponse, AdminBarAddResp.class);
+        return resp.getBarId();
     }
 
 

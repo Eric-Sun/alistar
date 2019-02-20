@@ -42,11 +42,11 @@ public class BarController {
     }
 
     @RequestMapping("/create")
+    @ResponseBody
     public String create(HttpServletRequest request,
                          @RequestParam(name = "name") String name,
                          @RequestParam(name = "userId") Integer userId) {
-        barServerManager.createBar(name, userId);
-        return "forward:/bar/list";
+        return JSON.toJSONString(barServerManager.createBar(name, userId));
     }
 
     @RequestMapping("/delete")

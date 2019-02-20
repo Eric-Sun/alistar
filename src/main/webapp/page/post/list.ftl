@@ -3,8 +3,8 @@
 <!-- Content Header (Page header) -->
 
 <!-- Main content -->
-<section class="content">
-    <div id="postListDiv" class="row">
+<section id="postList" class="content">
+    <div class="row">
         <div class="col-xs-12">
 
             <div class="box">
@@ -13,7 +13,7 @@
                 </div>
                 <div class="box-body">
                     <button class="btn btn-info btn-sm right"
-                            onclick="javascript:location.href='/post/preCreate?barId='">
+                            v-on:click="showCreatePostModal()">
                         创建新帖子
                     </button>
                 </div>
@@ -35,12 +35,12 @@
                             <td>{{post.postId}}</td>
                             <td>{{post.userName}}</td>
                             <td><a style="cursor:pointer;"
-                                   onclick="javascript:location.href='/post/detail?postId={{post.postId}}&barId={{barId}}'">{{post.content}}</a>
+                                   v-on:click="navToPostDetail(index)">{{post.content}}</a>
                             </td>
                             <td>{{post.createtime}}</td>
                             <td>
                                 <button class="btn btn-info btn-sm right"
-                                        onclick="javascript:location.href='/post/preUpdate?postId={{post.postId}}&barId={{barId}}'">
+                                        v-on:click="showUpdatePostModal(index)">
                                     更新
                                 </button>
                                 <button class="btn btn-info btn-sm right"
@@ -59,22 +59,110 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form @submit.prevent="createPostSubmit" method="post">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">创建帖子</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group margin">
+                            <div class="form-group form-inline">
+                                <label>发帖人用户id</label>
+                                <input type="text" class="form-control" name="userId" v-model="userId"/>
+                            </div>
+                            <div class="form-group">
+                                <label>帖子内容</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="content"
+                                      v-model="content"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">创建</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updatePostModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form @submit.prevent="updatePostSubmit" method="post">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">更新帖子</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group margin">
+                            <div class="form-group form-inline">
+                                <label>发帖人用户id</label>
+                                <input type="text" class="form-control" name="userId" v-model="updatePost.userId"
+                                        />
+                            </div>
+                            <div class="form-group">
+                                <label>帖子内容</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="content"
+                                      v-model="updatePost.content"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">更新</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </section>
+
 <!-- /.content -->
 </@layout.mainLayout>
 <script type="text/javascript">
-    var postListDiv = new Vue({
-                el: "#postListDiv",
+    var postList = new Vue({
+                el: "#postList",
                 data: {
                     barName: "",
                     postList: [],
-                    barId: 0
+                    barId: 0,
+                    content: "",
+                    userId: "",
+                    updatePost: {}
                 },
                 created: function () {
                     this.barId = getQueryString("barId");
                     this.getPostList();
                 },
                 methods: {
+                    createPostSubmit: function () {
+                        var that = this;
+                        $.ajax({
+                            url: "/post/create",
+                            data: {
+                                barId: this.barId,
+                                content: this.content,
+                                userId: this.userId
+                            },
+                            success: function (data) {
+                                alert("创建成功");
+                                $("#createPostModal").modal('hide');
+                                that.getPostList();
+                            }
+                        });
+                    },
                     getPostList: function () {
                         var _self = this;
                         $.ajax({
@@ -84,8 +172,8 @@
                             },
                             dataType: "json",
                             success: function (data) {
-                                _self.postList = data.postList;
-                                _self.barName = data.barName;
+                                Vue.set(postList, "postList", data.postList);
+                                Vue.set(postList, "barName", data.barName);
                             }
                         });
                     },
@@ -103,8 +191,47 @@
                                 that.postList.splice(index, 1);
                             }
                         })
+                    },
+                    showCreatePostModal: function () {
+                        $("#createPostModal").modal();
+                    },
+                    showUpdatePostModal: function (index) {
+                        var postId = this.postList[index].postId;
+                        var that = this;
+                        $("#updatePostModal").modal();
+                        $.ajax({
+                            url: "/post/getDetail",
+                            data: {
+                                postId: postId
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                that.updatePost = data;
+                            }
+                        })
+                    },
+                    navToPostDetail: function (index) {
+                        var postId = this.postList[index].postId;
+                        location.href = "/post/detail?postId=" + postId + "&barId=" + this.barId;
+                    },
+                    updatePostSubmit: function () {
+                        var that = this;
+                        $.ajax({
+                            url: "/post/update",
+                            data: {
+                                postId: this.updatePost.postId,
+                                content: this.updatePost.content
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                alert("更新成功")
+                                $("#updatePostModal").modal('hide');
+                                that.getPostList();
+                            }
+                        })
                     }
                 }
             })
             ;
+
 </script>
