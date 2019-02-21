@@ -1,61 +1,75 @@
 <#import "layouts/layout.ftl" as layout />
 <@layout.mainLayout>
 <section id="postDetail" class="content">
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="box box-primary">
             <div class="box-body">
-                <div class="input-group margin">
-                    <div class="form-group form-inline">
-                        <label>发帖人用户</label>
-                        <label class="form-control">{{post.userName}}<label>
+                <div class="row">
+                    <div class="col-md-2">
+                        发帖人用户
                     </div>
-                    <div class="form-group">
-                        <label>帖子内容</label>
-                        <label class="form-control">{{post.content}}</label>
+                    <div class="col-md-10">
+                        {{post.userName}}
                     </div>
-                    <div class="form-group">
-                        <label>创建时间</label>
-                        <label class="form-control">{{post.createtime}}</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        帖子内容
                     </div>
-                    <div class="form-group">
+                    <div class="col-md-10">
+                        {{post.content}}
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        创建时间
+                    </div>
+                    <div class="col-md-10">
+                        {{post.createtime}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
                         <button class="btn btn-info btn-sm right" v-on:click="showCreateReplyModal">创建新的回复</button>
                     </div>
                 </div>
             </div>
-            <!-- /input-group -->
-
-            <div class="box-body table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>回复id</th>
-                        <th>发帖人</th>
-                        <th>回复内容</th>
-                        <th>创建时间</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(reply,index) in replyList">
-                        <td>{{reply.replyId}}</td>
-                        <td>{{reply.userName}}</td>
-                        <td>{{reply.content}}</td>
-                        <td>{{reply.createtime}}</td>
-                        <td>
-                            <button class="btn btn-info btn-sm right"
-                                    v-on:click="showUpdateReplyModal(index)">
-                                更新
-                            </button>
-                            <button class="btn btn-info btn-sm right"
-                                    v-on:click="deleteReply(index)">
-                                删除
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
+        <!-- /input-group -->
+
+        <div class="box-body table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="col-md-1">回复id</th>
+                    <th class="col-md-1">发帖人</th>
+                    <th class="col-md-6">回复内容</th>
+                    <th class="col-md-2">创建时间</th>
+                    <th class="col-md-2">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(reply,index) in replyList">
+                    <td class="col-md-1">{{reply.replyId}}</td>
+                    <td class="col-md-1">{{reply.userName}}</td>
+                    <td class="col-md-6">{{reply.content}}</td>
+                    <td class="col-md-2">{{reply.createtime}}</td>
+                    <td class="col-md-2">
+                        <button class="btn btn-info btn-sm right"
+                                v-on:click="showUpdateReplyModal(index)">
+                            更新
+                        </button>
+                        <button class="btn btn-info btn-sm right"
+                                v-on:click="deleteReply(index)">
+                            删除
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     </div>
 
     <div class="modal fade" id="createReplyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -65,7 +79,7 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">创建回复22</h4>
+                        <h4 class="modal-title" id="myModalLabel">创建回复</h4>
                     </div>
                     <div class="modal-body">
                         <div class="input-group margin">
@@ -75,7 +89,7 @@
                             </div>
                             <div class="form-group">
                                 <label>回复内容</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="content"
+                            <textarea class="form-control" cols="80" rows="10" placeholder="Enter ..." name="content"
                                       v-model="addReply.content"></textarea>
                             </div>
                         </div>
@@ -109,7 +123,7 @@
                             </div>
                             <div class="form-group">
                                 <label>回复内容</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="content"
+                            <textarea class="form-control" cols="80" rows="10" placeholder="Enter ..." name="content"
                                       v-model="updateReply.content"></textarea>
                             </div>
                         </div>
@@ -184,6 +198,7 @@
                                 postId: this.postId,
                                 barId: this.barId
                             },
+                            type: "post",
                             dataType: "json",
                             success: function (data) {
                                 alert("创建成功");
@@ -231,6 +246,7 @@
                                 userId: this.updateReply.userId,
                                 content: this.updateReply.content
                             },
+                            type: "post",
                             dataType: "json",
                             success: function (data) {
                                 alert("成功")

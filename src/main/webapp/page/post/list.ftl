@@ -77,7 +77,7 @@
                             </div>
                             <div class="form-group">
                                 <label>帖子内容</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="content"
+                            <textarea class="form-control" cols="80" rows="10" placeholder="Enter ..." name="content"
                                       v-model="content"></textarea>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                             </div>
                             <div class="form-group">
                                 <label>帖子内容</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="content"
+                            <textarea class="form-control" cols="80" rows="10" placeholder="Enter ..." name="content"
                                       v-model="updatePost.content"></textarea>
                             </div>
                         </div>
@@ -156,6 +156,7 @@
                                 content: this.content,
                                 userId: this.userId
                             },
+                            type: "post",
                             success: function (data) {
                                 alert("创建成功");
                                 $("#createPostModal").modal('hide');
@@ -164,7 +165,8 @@
                         });
                     },
                     getPostList: function () {
-                        var _self = this;
+                        alert(1);
+                        var that = this;
                         $.ajax({
                             url: "/post/getPostList",
                             data: {
@@ -172,8 +174,11 @@
                             },
                             dataType: "json",
                             success: function (data) {
-                                Vue.set(postList, "postList", data.postList);
-                                Vue.set(postList, "barName", data.barName);
+                                that.postList = data.postList;
+                                that.barName = data.barName;
+                            },
+                            error: function (data) {
+                                alert(JSON.stringify(data));
                             }
                         });
                     },
@@ -222,6 +227,7 @@
                                 postId: this.updatePost.postId,
                                 content: this.updatePost.content
                             },
+                            type: "post",
                             dataType: "json",
                             success: function (data) {
                                 alert("更新成功")

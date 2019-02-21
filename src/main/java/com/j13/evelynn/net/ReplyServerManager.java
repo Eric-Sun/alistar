@@ -49,7 +49,7 @@ public class ReplyServerManager extends BaseServerManager {
         return resp;
     }
 
-    public Object create(int barId, int postId, int userId, int content) {
+    public Object create(int barId, int postId, int userId, String content) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.add");
         params.put("postId", postId);

@@ -29,7 +29,7 @@ public class ReplyController {
     @RequestMapping("/create")
     @ResponseBody
     public String create(@RequestParam(name = "userId") int userId,
-                         @RequestParam(name = "content") int content,
+                         @RequestParam(name = "content") String content,
                          @RequestParam(name = "postId") int postId,
                          @RequestParam(name = "barId") int barId) {
         return JSON.toJSONString(replyServerManager.create(barId, postId, userId, content));

@@ -109,6 +109,7 @@
                                 name: this.barName,
                                 userId: this.userId
                             },
+                            type:"post",
                             success: function (data) {
                                 alert("创建成功");
                                 $("#createBarModal").modal('hide');
