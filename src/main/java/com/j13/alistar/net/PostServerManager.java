@@ -32,6 +32,11 @@ public class PostServerManager extends BaseServerManager {
             PostVO a = new PostVO();
             BeanUtils.copyProperties(a, r);
             a.setCreatetime(sdf.format(new Date(r.getCreatetime())));
+            a.setUpdatetime(sdf.format(new Date(r.getUpdatetime())));
+            if (a.getContent().length() > 20) {
+                a.setShortContent(a.getContent().substring(0, 20));
+                a.setShowLongContent(true);
+            }
             list.add(a);
         }
         Map<String, Object> data = Maps.newHashMap();
@@ -52,7 +57,7 @@ public class PostServerManager extends BaseServerManager {
         return resp.getPostId();
     }
 
-    public CommonResultResp delete(int postId,int barId) {
+    public CommonResultResp delete(int postId, int barId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.delete");
         params.put("postId", postId);
@@ -73,6 +78,11 @@ public class PostServerManager extends BaseServerManager {
         PostVO a = new PostVO();
         BeanUtils.copyProperties(a, resp);
         a.setCreatetime(sdf.format(new Date(resp.getCreatetime())));
+        a.setUpdatetime(sdf.format(new Date(resp.getUpdatetime())));
+        if (a.getContent().length() > 20) {
+            a.setShortContent(a.getContent().substring(0, 20));
+            a.setShowLongContent(true);
+        }
         return a;
     }
 

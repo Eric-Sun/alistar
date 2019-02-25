@@ -16,7 +16,14 @@
                     <div class="col-md-2">
                         帖子内容
                     </div>
-                    <div class="col-md-10">
+                    <div v-if="showLongContent" class="col-md-10">
+                        {{post.shortContent}}
+                        <button class="btn btn-info btn-sm right"
+                                v-on:click="showLongContent()">
+                            显示全部
+                        </button>
+                    </div>
+                    <div v-else class="col-md-10">
                         {{post.content}}
                     </div>
 
@@ -27,6 +34,14 @@
                     </div>
                     <div class="col-md-10">
                         {{post.createtime}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        最近更新时间
+                    </div>
+                    <div class="col-md-10">
+                        {{post.updatetime}}
                     </div>
                 </div>
                 <div class="row">
@@ -133,6 +148,24 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
                         </button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="longContentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    全部内容
+                </div>
+                <div class="modal-body">
+                    {{post.content}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
+                    </button>
+                </div>
                 </form>
             </div>
         </div>
@@ -254,6 +287,10 @@
                                 that.getReplyList()
                             }
                         })
+                    }  ,
+                    showLongContent : function(){
+                        $("#longContentModal").modal();
+
                     }
                 }
             })

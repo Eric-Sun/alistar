@@ -26,6 +26,7 @@
                             <th>发帖人</th>
                             <th>帖子内容</th>
                             <th>创建时间</th>
+                            <th>最后更新时间</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -34,10 +35,22 @@
                         <tr v-for="(post,index) in postList">
                             <td>{{post.postId}}</td>
                             <td>{{post.userName}}</td>
-                            <td><a style="cursor:pointer;"
-                                   v-on:click="navToPostDetail(index)">{{post.content}}</a>
+                            <td>
+                                <div v-if="post.showLongContent">
+                                    <a style="cursor:pointer;"
+                                       v-on:click="navToPostDetail(index)">{{post.shortContent}}</a>
+                                    <button class="btn btn-info btn-sm right"
+                                            v-on:click="showLongContent(index)">
+                                        显示全部
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <a style="cursor:pointer;"
+                                       v-on:click="navToPostDetail(index)">{{post.content}}</a>
+                                </div>
                             </td>
                             <td>{{post.createtime}}</td>
+                            <td>{{post.updatetime}}</td>
                             <td>
                                 <button class="btn btn-info btn-sm right"
                                         v-on:click="showUpdatePostModal(index)">
@@ -127,6 +140,24 @@
         </div>
     </div>
 
+    <div class="modal fade" id="longContentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    全部内容
+                </div>
+                <div class="modal-body">
+                    {{longContent}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <!-- /.content -->
@@ -140,7 +171,8 @@
                     barId: 0,
                     content: "",
                     userId: "",
-                    updatePost: {}
+                    updatePost: {},
+                    longContent: ""
                 },
                 created: function () {
                     this.barId = getQueryString("barId");
@@ -235,6 +267,10 @@
                                 that.getPostList();
                             }
                         })
+                    },
+                    showLongContent: function (index) {
+                        $("#longContentModal").modal();
+                        this.longContent = this.postList[index].content;
                     }
                 }
             })

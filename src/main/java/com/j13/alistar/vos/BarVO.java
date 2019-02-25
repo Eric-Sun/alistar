@@ -6,6 +6,15 @@ public class BarVO {
     private String createtime;
     private int userId;
     private String userName;
+    private int postCount;
+
+    public int getPostCount() {
+        return postCount;
+    }
+
+    public void setPostCount(int postCount) {
+        this.postCount = postCount;
+    }
 
     public String getUserName() {
         return userName;

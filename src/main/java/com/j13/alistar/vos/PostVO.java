@@ -7,6 +7,33 @@ public class PostVO {
     private String createtime;
     private int userId;
     private String userName;
+    private String updatetime;
+    private String shortContent;
+    private boolean isShowLongContent = false;
+
+    public boolean isShowLongContent() {
+        return isShowLongContent;
+    }
+
+    public void setShowLongContent(boolean isShowLongContent) {
+        this.isShowLongContent = isShowLongContent;
+    }
+
+    public String getShortContent() {
+        return shortContent;
+    }
+
+    public void setShortContent(String shortContent) {
+        this.shortContent = shortContent;
+    }
+
+    public String getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(String updatetime) {
+        this.updatetime = updatetime;
+    }
 
     public int getUserId() {
         return userId;

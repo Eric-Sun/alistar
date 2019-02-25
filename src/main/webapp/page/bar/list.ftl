@@ -24,6 +24,7 @@
                             <th>主题id</th>
                             <th>主题名称</th>
                             <th>主题发起者昵称</th>
+                            <th>帖子数量</th>
                             <th>创建时间</th>
                             <th>删除</th>
                         </tr>
@@ -34,6 +35,7 @@
                             <td><a style="cursor:pointer;"
                                    v-on:click="navToPostList(index)">{{bar.name}}</a></td>
                             <td>{{bar.userName}}</td>
+                            <td>{{bar.postCount}}</td>
                             <td>{{bar.createtime}}</td>
                             <td>
                                 <button class="btn btn-info btn-sm right"
