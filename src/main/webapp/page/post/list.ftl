@@ -16,82 +16,93 @@
                             v-on:click="showCreatePostModal()">
                         创建新帖子
                     </button>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th>帖子id</th>
-                            <th>发帖人</th>
-                            <th>帖子标题</th>
-                            <th>帖子内容</th>
-                            <th>帖子状态</th>
-                            <th>创建时间</th>
-                            <th>最后更新时间</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" v-model="queryData"/>
+                        </div>
+                        <div class="col-md-7">
+                            <button type="button" v-on:click="queryTitle">搜索标题</button>
+                            <button type="button" v-on:click="queryUserId">搜索用户id</button>
+                        </div>
 
-                        <tr v-for="(post,index) in postList">
-                            <td>{{post.postId}}</td>
-                            <td>{{post.userName}}</td>
-                            <td>{{post.title}}</td>
-                            <td>
-                                <div v-if="post.showLongContent">
-                                    <a style="cursor:pointer;"
-                                       v-on:click="navToPostDetail(index)">{{post.shortContent}}</a>
-                                    <button class="btn btn-info btn-sm right"
-                                            v-on:click="showLongContent(index)">
-                                        显示全部
-                                    </button>
-                                </div>
-                                <div v-else>
-                                    <a style="cursor:pointer;"
-                                       v-on:click="navToPostDetail(index)">{{post.content}}</a>
-                                </div>
-                            </td>
-                            <td>
-                                <div v-if="post.status==0">
-                                    上线
-                                </div>
-                                <div v-else>
-                                    下线
-                                </div>
-                            </td>
+                    </div>
 
-                            <td>{{post.createtime}}</td>
-                            <td>{{post.updatetime}}</td>
-                            <td>
-                                <div v-if="post.status==0">
-                                    <button class="btn btn-info btn-sm right"
-                                            v-on:click="offline(index)">
-                                        下线
-                                    </button>
-                                </div>
-                                <div v-if="post.status==1">
-                                    <button class="btn btn-info btn-sm right"
-                                            v-on:click="online(index)">
+
+                    <!-- /.box-header -->
+                    <div class="box-body table-responsive">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>帖子id</th>
+                                <th>发帖人</th>
+                                <th>帖子标题</th>
+                                <th>帖子内容</th>
+                                <th>帖子状态</th>
+                                <th>创建时间</th>
+                                <th>最后更新时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr v-for="(post,index) in postList">
+                                <td>{{post.postId}}</td>
+                                <td>{{post.userName}}</td>
+                                <td>{{post.title}}</td>
+                                <td>
+                                    <div v-if="post.showLongContent">
+                                        <a style="cursor:pointer;"
+                                           v-on:click="navToPostDetail(index)">{{post.shortContent}}</a>
+                                        <button class="btn btn-info btn-sm right"
+                                                v-on:click="showLongContent(index)">
+                                            显示全部
+                                        </button>
+                                    </div>
+                                    <div v-else>
+                                        <a style="cursor:pointer;"
+                                           v-on:click="navToPostDetail(index)">{{post.content}}</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div v-if="post.status==0">
                                         上线
+                                    </div>
+                                    <div v-else>
+                                        下线
+                                    </div>
+                                </td>
+
+                                <td>{{post.createtime}}</td>
+                                <td>{{post.updatetime}}</td>
+                                <td>
+                                    <div v-if="post.status==0">
+                                        <button class="btn btn-info btn-sm right"
+                                                v-on:click="offline(index)">
+                                            下线
+                                        </button>
+                                    </div>
+                                    <div v-if="post.status==1">
+                                        <button class="btn btn-info btn-sm right"
+                                                v-on:click="online(index)">
+                                            上线
+                                        </button>
+                                    </div>
+
+                                    <button class="btn btn-info btn-sm right"
+                                            v-on:click="showUpdatePostModal(index)">
+                                        更新
                                     </button>
-                                </div>
-
-                                <button class="btn btn-info btn-sm right"
-                                        v-on:click="showUpdatePostModal(index)">
-                                    更新
-                                </button>
-                                <button class="btn btn-info btn-sm right"
-                                        v-on:click="deletePost(index)">
-                                    删除
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                    <button class="btn btn-info btn-sm right"
+                                            v-on:click="deletePost(index)">
+                                        删除
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
                 </div>
-                <!-- /.box-body -->
-
             </div>
             <!-- /.box -->
         </div>
@@ -207,7 +218,8 @@
                     title: "",
                     userId: "",
                     updatePost: {},
-                    longContent: ""
+                    longContent: "",
+                    queryData: ""
                 },
                 created: function () {
                     this.barId = getQueryString("barId");
@@ -343,6 +355,40 @@
                                 that.getPostList();
                             }
                         })
+                    },
+                    queryTitle: function () {
+                        var that = this;
+                        $.ajax({
+                            url: "/post/queryTitle",
+                            data: {
+                                barId: this.barId,
+                                name: this.queryData
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                that.postList = data;
+                            },
+                            error: function (data) {
+                                alert(JSON.stringify(data));
+                            }
+                        });
+                    },
+                    queryUserId: function () {
+                        var that = this;
+                        $.ajax({
+                            url: "/post/queryUserId",
+                            data: {
+                                barId: this.barId,
+                                userId: this.queryData
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                that.postList = data;
+                            },
+                            error: function (data) {
+                                alert(JSON.stringify(data));
+                            }
+                        });
                     }
                 }
             })

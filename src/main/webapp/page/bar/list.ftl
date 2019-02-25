@@ -16,6 +16,7 @@
                         创建新主题
                     </button>
                 </div>
+
                 <!-- /.box-header -->
                 <div class="box-body table-responsive">
                     <table class="table table-bordered table-striped">
@@ -111,7 +112,7 @@
                                 name: this.barName,
                                 userId: this.userId
                             },
-                            type:"post",
+                            type: "post",
                             success: function (data) {
                                 alert("创建成功");
                                 $("#createBarModal").modal('hide');

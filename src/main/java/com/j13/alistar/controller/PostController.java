@@ -101,4 +101,18 @@ public class PostController {
         return JSON.toJSONString(postServerManager.offline(postId));
     }
 
+    @RequestMapping("/queryTitle")
+    @ResponseBody
+    public String queryTitle(@RequestParam(name = "barId") int barId,
+                             @RequestParam(name = "name") int name) {
+        return JSON.toJSONString(postServerManager.queryTitle(barId,name));
+    }
+
+    @RequestMapping("/queryUserId")
+    @ResponseBody
+    public String queryUserId(@RequestParam(name = "barId") int barId,
+                             @RequestParam(name = "userId") int userId) {
+        return JSON.toJSONString(postServerManager.queryUserId(barId, userId));
+    }
+
 }

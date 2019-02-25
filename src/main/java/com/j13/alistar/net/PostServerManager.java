@@ -118,4 +118,54 @@ public class PostServerManager extends BaseServerManager {
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
         return resp;
     }
+
+    public List<PostVO> queryTitle(int barId, int name) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.post.queryTitle");
+        params.put("barId", barId);
+        params.put("name", name);
+        params.put("size", SIZE_PER_PAGE);
+        params.put("pageNum", 0);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        AdminPostQueryTitleResp resp = JSON.parseObject(rawResponse, AdminPostQueryTitleResp.class);
+        List<PostVO> list = Lists.newLinkedList();
+        for (AdminPostDetailResp r : resp.getList()) {
+            PostVO a = new PostVO();
+            BeanUtils.copyProperties(a, r);
+            a.setCreatetime(sdf.format(new Date(r.getCreatetime())));
+            a.setUpdatetime(sdf.format(new Date(r.getUpdatetime())));
+            if (a.getContent().length() > 20) {
+                a.setShortContent(a.getContent().substring(0, 20));
+                a.setShowLongContent(true);
+            }
+            list.add(a);
+        }
+        return list;
+    }
+
+    public List<PostVO> queryUserId(int barId, int userId) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.post.queryUserId");
+        params.put("barId", barId);
+        params.put("userId", userId);
+        params.put("size", SIZE_PER_PAGE);
+        params.put("pageNum", 0);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        AdminPostQueryUserIdResp resp = JSON.parseObject(rawResponse, AdminPostQueryUserIdResp.class);
+        List<PostVO> list = Lists.newLinkedList();
+        for (AdminPostDetailResp r : resp.getList()) {
+            PostVO a = new PostVO();
+            BeanUtils.copyProperties(a, r);
+            a.setCreatetime(sdf.format(new Date(r.getCreatetime())));
+            a.setUpdatetime(sdf.format(new Date(r.getUpdatetime())));
+            if (a.getContent().length() > 20) {
+                a.setShortContent(a.getContent().substring(0, 20));
+                a.setShowLongContent(true);
+            }
+            list.add(a);
+        }
+        return list;
+    }
 }
