@@ -9,11 +9,11 @@
 
             <div id="tb" class="box">
                 <div class="box-header">
-                    <h3 class="box-title">吧列表</h3>
+                    <h3 class="box-title">主题列表</h3>
                 </div>
                 <div class="box-body">
                     <button class="btn btn-info btn-sm right" v-on:click="showCreateBarModal()">
-                        创建新吧
+                        创建新主题
                     </button>
                 </div>
                 <!-- /.box-header -->
@@ -21,9 +21,9 @@
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>吧id</th>
-                            <th>吧名称</th>
-                            <th>吧主昵称</th>
+                            <th>主题id</th>
+                            <th>主题名称</th>
+                            <th>主题发起者昵称</th>
                             <th>创建时间</th>
                             <th>删除</th>
                         </tr>
@@ -63,18 +63,18 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">创建BAR</h4>
+                    <h4 class="modal-title" id="myModalLabel">创建主题</h4>
                 </div>
                 <div class="modal-body">
 
                     <div class="input-group margin">
 
                         <div class="form-group form-inline">
-                            <label>吧名称</label>
+                            <label>主题名称</label>
                             <input type="text" class="form-control" name="name" v-model="barName"/>
                         </div>
                         <div class="form-group form-inline">
-                            <label>吧主id</label>
+                            <label>主题发起者用户id</label>
                             <input type="text" class="form-control" name="userId" v-model="userId"/>
                         </div>
 

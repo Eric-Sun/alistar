@@ -51,7 +51,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <listener>
-        <listener-class>com.j13.evelynn.core.BaseListener</listener-class>
+        <listener-class>com.j13.alistar.core.BaseListener</listener-class>
     </listener>
 
     <servlet>

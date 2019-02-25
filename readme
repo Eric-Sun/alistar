@@ -1,4 +1,2 @@
-画家端：
-    订单
-        查看现有的订单
-        订单详情，进度更新等
+#alter table bar add column post_count int(11) default 0 not null after name;
+alter table post add column reply_count int(11) default 0  not null after content;

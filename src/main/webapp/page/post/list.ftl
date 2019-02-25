@@ -165,7 +165,6 @@
                         });
                     },
                     getPostList: function () {
-                        alert(1);
                         var that = this;
                         $.ajax({
                             url: "/post/getPostList",
@@ -188,7 +187,8 @@
                         $.ajax({
                             url: "/post/delete",
                             data: {
-                                postId: postId
+                                postId: postId,
+                                barId: this.barId
                             },
                             dataType: "json",
                             success: function (data) {

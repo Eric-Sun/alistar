@@ -23,7 +23,7 @@
     </http>
 
 
-    <beans:bean id="myFilter" class="com.j13.evelynn.security.service.WebFilterSecurityInterceptor">
+    <beans:bean id="myFilter" class="com.j13.alistar.security.service.WebFilterSecurityInterceptor">
         <beans:property name="authenticationManager"
                   ref="authManager"/>
         <beans:property name="accessDecisionManager"
@@ -37,28 +37,28 @@
 
 
     <beans:bean id="userDetailsService"
-          class="com.j13.evelynn.security.service.WebUserDetailService">
+          class="com.j13.alistar.security.service.WebUserDetailService">
     </beans:bean>
 
     <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源 -->
     <beans:bean id="myAccessDecisionManagerBean"
-          class="com.j13.evelynn.security.service.WebAccessDecisionManager">
+          class="com.j13.alistar.security.service.WebAccessDecisionManager">
     </beans:bean>
 
     <!-- 资源源数据定义，即定义某一资源可以被哪些角色访问 -->
     <beans:bean id="securityMetadataSource"
-          class="com.j13.evelynn.security.service.WebInvocationSecurityMetadataSourceService">
+          class="com.j13.alistar.security.service.WebInvocationSecurityMetadataSourceService">
         <beans:constructor-arg name="accountServerManager" ref="accountServerManager">
         </beans:constructor-arg>
 
     </beans:bean>
 
     <!--自定义验证密码-->
-    <beans:bean id="daoAuthenticationProvider" class="com.j13.evelynn.security.service.WebDaoAuthenticationProvider">
+    <beans:bean id="daoAuthenticationProvider" class="com.j13.alistar.security.service.WebDaoAuthenticationProvider">
         <beans:property name="userDetailsService" ref="userDetailsService"></beans:property>
     </beans:bean>
 
-    <!--<bean id="accountServerManager" class="com.j13.evelynn.net.AccountServerManager">-->
+    <!--<bean id="accountServerManager" class="com.j13.alistar.net.AccountServerManager">-->
     <!--</bean>-->
 
 </beans:beans>

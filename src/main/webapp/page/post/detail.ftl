@@ -70,7 +70,6 @@
             </table>
         </div>
     </div>
-    </div>
 
     <div class="modal fade" id="createReplyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -214,7 +213,8 @@
                         $.ajax({
                             url: "/reply/delete",
                             data: {
-                                replyId: replyId
+                                replyId: replyId,
+                                postId: this.postId
                             },
                             dataType: "json",
                             success: function (data) {
