@@ -14,6 +14,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2">
+                        标题
+                    </div>
+                    <div class="col-md-10">
+                        {{post.title}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
                         帖子内容
                     </div>
                     <div v-if="showLongContent" class="col-md-10">

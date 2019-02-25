@@ -1,2 +1,11 @@
-#alter table bar add column post_count int(11) default 0 not null after name;
+v1.1
+alter table bar add column post_count int(11) default 0 not null after name;
 alter table post add column reply_count int(11) default 0  not null after content;
+
+
+v1.1.1
+alter table post add column title varchar(50) default ''  not null after bar_id;
+
+v1.2
+alter table post add column status int(11) default 0  not null after content;
+

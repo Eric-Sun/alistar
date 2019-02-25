@@ -10,6 +10,24 @@ public class PostVO {
     private String updatetime;
     private String shortContent;
     private boolean isShowLongContent = false;
+    private String title;
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public boolean isShowLongContent() {
         return isShowLongContent;

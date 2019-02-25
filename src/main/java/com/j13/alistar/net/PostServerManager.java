@@ -45,12 +45,13 @@ public class PostServerManager extends BaseServerManager {
         return data;
     }
 
-    public int create(String barId, int userId, String content) {
+    public int create(String barId, int userId, String title, String content) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.add");
         params.put("barId", barId);
         params.put("userId", userId);
         params.put("content", content);
+        params.put("title", title);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         AdminPostAddResp resp = JSON.parseObject(rawResponse, AdminPostAddResp.class);
@@ -87,13 +88,34 @@ public class PostServerManager extends BaseServerManager {
     }
 
     public void update(int postId,
-                       String content) {
+                       String content, String title) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("act", "admin.post.updateContent");
+        params.put("act", "admin.post.updateContentAndTitle");
         params.put("postId", postId);
         params.put("content", content);
+        params.put("title", title);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
+    }
+
+    public CommonResultResp online(int postId) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.post.online");
+        params.put("postId", postId);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
+        return resp;
+    }
+
+    public CommonResultResp offline(int postId) {
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.post.offline");
+        params.put("postId", postId);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
+        return resp;
     }
 }

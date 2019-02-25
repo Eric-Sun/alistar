@@ -41,8 +41,9 @@ public class PostController {
     public String create(@RequestParam(name = "userId") int userId,
                          @RequestParam(name = "content") String content,
                          @RequestParam(name = "barId") String barId,
+                         @RequestParam(name = "title") String title,
                          Map<String, Object> model) {
-        return JSON.toJSONString(postServerManager.create(barId, userId, content));
+        return JSON.toJSONString(postServerManager.create(barId, userId, title, content));
 
     }
 
@@ -68,8 +69,9 @@ public class PostController {
     @ResponseBody
     public String update(
             @RequestParam(name = "postId") int postId,
-            @RequestParam(name = "content") String content) {
-        postServerManager.update(postId, content);
+            @RequestParam(name = "content") String content,
+            @RequestParam(name = "title") String title) {
+        postServerManager.update(postId, content, title);
         return "{}";
     }
 
@@ -86,5 +88,17 @@ public class PostController {
         return JSON.toJSONString(post);
     }
 
+
+    @RequestMapping("/online")
+    @ResponseBody
+    public String online(@RequestParam(name = "postId") int postId) {
+        return JSON.toJSONString(postServerManager.online(postId));
+    }
+
+    @RequestMapping("/offline")
+    @ResponseBody
+    public String offline(@RequestParam(name = "postId") int postId) {
+        return JSON.toJSONString(postServerManager.offline(postId));
+    }
 
 }

@@ -24,7 +24,9 @@
                         <tr>
                             <th>帖子id</th>
                             <th>发帖人</th>
+                            <th>帖子标题</th>
                             <th>帖子内容</th>
+                            <th>帖子状态</th>
                             <th>创建时间</th>
                             <th>最后更新时间</th>
                             <th>操作</th>
@@ -35,6 +37,7 @@
                         <tr v-for="(post,index) in postList">
                             <td>{{post.postId}}</td>
                             <td>{{post.userName}}</td>
+                            <td>{{post.title}}</td>
                             <td>
                                 <div v-if="post.showLongContent">
                                     <a style="cursor:pointer;"
@@ -49,9 +52,31 @@
                                        v-on:click="navToPostDetail(index)">{{post.content}}</a>
                                 </div>
                             </td>
+                            <td>
+                                <div v-if="post.status==0">
+                                    上线
+                                </div>
+                                <div v-else>
+                                    下线
+                                </div>
+                            </td>
+
                             <td>{{post.createtime}}</td>
                             <td>{{post.updatetime}}</td>
                             <td>
+                                <div v-if="post.status==0">
+                                    <button class="btn btn-info btn-sm right"
+                                            v-on:click="offline(index)">
+                                        下线
+                                    </button>
+                                </div>
+                                <div v-if="post.status==1">
+                                    <button class="btn btn-info btn-sm right"
+                                            v-on:click="online(index)">
+                                        上线
+                                    </button>
+                                </div>
+
                                 <button class="btn btn-info btn-sm right"
                                         v-on:click="showUpdatePostModal(index)">
                                     更新
@@ -88,6 +113,10 @@
                                 <label>发帖人用户id</label>
                                 <input type="text" class="form-control" name="userId" v-model="userId"/>
                             </div>
+                            <div class="form-group form-inline">
+                                <label>标题</label>
+                                <input type="text" class="form-control" name="title" v-model="title"/>
+                            </div>
                             <div class="form-group">
                                 <label>帖子内容</label>
                             <textarea class="form-control" cols="80" rows="10" placeholder="Enter ..." name="content"
@@ -120,6 +149,11 @@
                             <div class="form-group form-inline">
                                 <label>发帖人用户id</label>
                                 <input type="text" class="form-control" name="userId" v-model="updatePost.userId"
+                                        />
+                            </div>
+                            <div class="form-group form-inline">
+                                <label>标题</label>
+                                <input type="text" class="form-control" name="title" v-model="updatePost.title"
                                         />
                             </div>
                             <div class="form-group">
@@ -170,6 +204,7 @@
                     postList: [],
                     barId: 0,
                     content: "",
+                    title: "",
                     userId: "",
                     updatePost: {},
                     longContent: ""
@@ -186,7 +221,8 @@
                             data: {
                                 barId: this.barId,
                                 content: this.content,
-                                userId: this.userId
+                                userId: this.userId,
+                                title: this.title
                             },
                             type: "post",
                             success: function (data) {
@@ -231,6 +267,9 @@
                     },
                     showCreatePostModal: function () {
                         $("#createPostModal").modal();
+                        this.title = "";
+                        this.userId = "";
+                        this.content = "";
                     },
                     showUpdatePostModal: function (index) {
                         var postId = this.postList[index].postId;
@@ -257,7 +296,8 @@
                             url: "/post/update",
                             data: {
                                 postId: this.updatePost.postId,
-                                content: this.updatePost.content
+                                content: this.updatePost.content,
+                                title: this.updatePost.title
                             },
                             type: "post",
                             dataType: "json",
@@ -271,6 +311,38 @@
                     showLongContent: function (index) {
                         $("#longContentModal").modal();
                         this.longContent = this.postList[index].content;
+                    },
+                    offline: function (index) {
+                        var postId = this.postList[index].postId;
+                        var that = this;
+                        $.ajax({
+                            url: "/post/offline",
+                            data: {
+                                postId: postId
+                            },
+                            type: "post",
+                            dataType: "json",
+                            success: function (data) {
+                                alert("下线成功");
+                                that.getPostList();
+                            }
+                        })
+                    },
+                    online: function (index) {
+                        var postId = this.postList[index].postId;
+                        var that = this;
+                        $.ajax({
+                            url: "/post/online",
+                            data: {
+                                postId: postId
+                            },
+                            type: "post",
+                            dataType: "json",
+                            success: function (data) {
+                                alert("上线成功");
+                                that.getPostList();
+                            }
+                        })
                     }
                 }
             })
