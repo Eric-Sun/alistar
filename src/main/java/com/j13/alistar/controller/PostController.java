@@ -42,8 +42,10 @@ public class PostController {
                          @RequestParam(name = "content") String content,
                          @RequestParam(name = "barId") String barId,
                          @RequestParam(name = "title") String title,
+                         @RequestParam(name = "anonymous") int anonymous,
+                         @RequestParam(name = "anonymous") int type,
                          Map<String, Object> model) {
-        return JSON.toJSONString(postServerManager.create(barId, userId, title, content));
+        return JSON.toJSONString(postServerManager.create(barId, userId, title, content, anonymous,type));
 
     }
 
@@ -70,8 +72,10 @@ public class PostController {
     public String update(
             @RequestParam(name = "postId") int postId,
             @RequestParam(name = "content") String content,
-            @RequestParam(name = "title") String title) {
-        postServerManager.update(postId, content, title);
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "anonymous") int anonymous,
+            @RequestParam(name = "type") int type) {
+        postServerManager.update(postId, content, title,anonymous,type);
         return "{}";
     }
 
@@ -105,13 +109,13 @@ public class PostController {
     @ResponseBody
     public String queryTitle(@RequestParam(name = "barId") int barId,
                              @RequestParam(name = "name") int name) {
-        return JSON.toJSONString(postServerManager.queryTitle(barId,name));
+        return JSON.toJSONString(postServerManager.queryTitle(barId, name));
     }
 
     @RequestMapping("/queryUserId")
     @ResponseBody
     public String queryUserId(@RequestParam(name = "barId") int barId,
-                             @RequestParam(name = "userId") int userId) {
+                              @RequestParam(name = "userId") int userId) {
         return JSON.toJSONString(postServerManager.queryUserId(barId, userId));
     }
 

@@ -9,3 +9,20 @@ alter table post add column title varchar(50) default ''  not null after bar_id;
 v1.2
 alter table post add column status int(11) default 0  not null after content;
 
+v1.3
+alter table post add column anonymous int(11) default 0  not null after status;
+alter table user add column anon_nickname varchar(20) default '' not null after nickname;
+alter table reply add column anonymous int(11) default 0  not null after content;
+
+v1.4
+alter table post add column type int(11) default 0  not null after anonymous;
+
+
+v1.5
+alter table reply add column last_reply_id int(11) default 0 not null after post_id;
+
+v1.5.1
+#alter table user add column sex int(11) default 0 not null after anon_nickname;
+alter table user add column is_machine int(11) default 0 not null after sex;
+
+

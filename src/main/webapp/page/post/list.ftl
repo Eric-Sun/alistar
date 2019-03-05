@@ -38,6 +38,8 @@
                                 <th>帖子标题</th>
                                 <th>帖子内容</th>
                                 <th>帖子状态</th>
+                                <th>是否匿名</th>
+                                <th>帖子类型</th>
                                 <th>创建时间</th>
                                 <th>最后更新时间</th>
                                 <th>操作</th>
@@ -71,7 +73,22 @@
                                         下线
                                     </div>
                                 </td>
-
+                                <td>
+                                    <div v-if="post.anonymous==0">
+                                        非匿名
+                                    </div>
+                                    <div v-else>
+                                        匿名
+                                    </div>
+                                </td>
+                                <td>
+                                    <div v-if="post.type==0">
+                                        故事贴
+                                    </div>
+                                    <div v-else>
+                                        一日一记
+                                    </div>
+                                </td>
                                 <td>{{post.createtime}}</td>
                                 <td>{{post.updatetime}}</td>
                                 <td>
@@ -133,6 +150,20 @@
                             <textarea class="form-control" cols="80" rows="10" placeholder="Enter ..." name="content"
                                       v-model="content"></textarea>
                             </div>
+                            <div class="form-group">
+                                <label>是否匿名</label>
+                                <select class="form-control" v-model="anonymous">
+                                    <option value="0">否</option>
+                                    <option value="1">是</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>帖子类型</label>
+                                <select class="form-control" v-model="type">
+                                    <option value="0">故事贴</option>
+                                    <option value="1">一日一记</option>
+                                </select>
+                            </div>
                         </div>
 
                     </div>
@@ -171,6 +202,18 @@
                                 <label>帖子内容</label>
                             <textarea class="form-control" cols="80" rows="10" placeholder="Enter ..." name="content"
                                       v-model="updatePost.content"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>是否匿名</label>
+                                <select class="form-control" v-model="updatePost.anonymous">
+                                    <option value="0">否</option>
+                                    <option value="1">是</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>帖子类型</label>
+                                <div v-if="updatePost.type==0">故事贴</div>
+                                <div v-else>一日一记</div>
                             </div>
                         </div>
 
@@ -216,6 +259,8 @@
                     barId: 0,
                     content: "",
                     title: "",
+                    type: "",
+                    anonymous: "",
                     userId: "",
                     updatePost: {},
                     longContent: "",
@@ -234,7 +279,9 @@
                                 barId: this.barId,
                                 content: this.content,
                                 userId: this.userId,
-                                title: this.title
+                                title: this.title,
+                                anonymous: this.anonymous,
+                                type: this.type
                             },
                             type: "post",
                             success: function (data) {
@@ -309,7 +356,9 @@
                             data: {
                                 postId: this.updatePost.postId,
                                 content: this.updatePost.content,
-                                title: this.updatePost.title
+                                title: this.updatePost.title,
+                                anonymous: this.updatePost.anonymous,
+                                type: this.updatePost.type
                             },
                             type: "post",
                             dataType: "json",

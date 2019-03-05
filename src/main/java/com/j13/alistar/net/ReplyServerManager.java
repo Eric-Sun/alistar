@@ -34,34 +34,56 @@ public class ReplyServerManager extends BaseServerManager {
             BeanUtils.copyProperties(a, r);
             a.setCreatetime(sdf.format(new Date(r.getCreatetime())));
             list.add(a);
+//            if (r.getReplyList().size() != 0) {
+//                for (AdminReplyDetailResp r2 : r.getReplyList()) {
+//                    ReplyVO a2 = new ReplyVO();
+//                    BeanUtils.copyProperties(a2, r2);
+//                    a2.setCreatetime(sdf.format(new Date(r2.getCreatetime())));
+//                    a.getReplyList().add(a2);
+//                    if (r2.getReplyList().size() != 0) {
+//                        for (AdminReplyDetailResp r3 : r2.getReplyList()) {
+//                            ReplyVO a3 = new ReplyVO();
+//                            BeanUtils.copyProperties(a3, r3);
+//                            a3.setCreatetime(sdf.format(new Date(r3.getCreatetime())));
+//                            a2.getReplyList().add(a3);
+//                        }
+//                    }
+//                }
+//            }
         }
+
         return list;
     }
 
-    public AdminReplyDetailResp get(int replyId) {
+    public ReplyVO get(int replyId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.detail");
         params.put("replyId", replyId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         AdminReplyDetailResp resp = JSON.parseObject(rawResponse, AdminReplyDetailResp.class);
-        return resp;
+        ReplyVO reply = new ReplyVO();
+        BeanUtils.copyProperties(reply, resp);
+        reply.setCreatetime(sdf.format(new Date(resp.getCreatetime())));
+        return reply;
     }
 
-    public Object create(int barId, int postId, int userId, String content) {
+    public Object create(int barId, int postId, int userId, String content, int anonymous, int lastReplyId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.add");
         params.put("postId", postId);
         params.put("userId", userId);
         params.put("content", content);
+        params.put("anonymous", anonymous);
         params.put("barId", barId);
+        params.put("lastReplyId", lastReplyId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         AdminReplyAddResp resp = JSON.parseObject(rawResponse, AdminReplyAddResp.class);
         return resp.getReplyId();
     }
 
-    public CommonResultResp delete(int replyId,int postId) {
+    public CommonResultResp delete(int replyId, int postId) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.delete");
         params.put("replyId", replyId);
@@ -72,12 +94,13 @@ public class ReplyServerManager extends BaseServerManager {
         return resp;
     }
 
-    public Object update(int replyId, int userId, int content) {
+    public Object update(int replyId, int userId, String content, int anonymous) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("act", "admin.reply.updateContent");
+        params.put("act", "admin.reply.update");
         params.put("replyId", replyId);
         params.put("userId", userId);
         params.put("content", content);
+        params.put("anonymous", anonymous);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);

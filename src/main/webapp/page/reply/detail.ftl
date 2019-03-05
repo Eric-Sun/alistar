@@ -1,57 +1,23 @@
 <#import "layouts/layout.ftl" as layout />
 <@layout.mainLayout>
-<section id="postDetail" class="content">
+<section id="level2ReplyDiv" class="content">
     <div class="col-md-12">
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-2">
-                        发帖人用户
+                        回复用户
                     </div>
                     <div class="col-md-10">
-                        {{post.userName}}
+                        {{reply.userName}}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2">
-                        标题
+                        回复内容
                     </div>
                     <div class="col-md-10">
-                        {{post.title}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        帖子内容
-                    </div>
-                    <div v-if="showLongContent" class="col-md-10">
-                        {{post.shortContent}}
-                        <button class="btn btn-info btn-sm right"
-                                v-on:click="showLongContent()">
-                            显示全部
-                        </button>
-                    </div>
-                    <div v-else class="col-md-10">
-                        {{post.content}}
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        是否匿名
-                    </div>
-                    <div class="col-md-10">
-                        <div v-if="post.anonymous==0">非匿名</div>
-                        <div v-else>匿名</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        帖子类型
-                    </div>
-                    <div class="col-md-10">
-                        <div v-if="post.type==0">故事贴</div>
-                        <div v-else>一日一记</div>
+                        {{reply.content}}
                     </div>
                 </div>
                 <div class="row">
@@ -59,17 +25,10 @@
                         创建时间
                     </div>
                     <div class="col-md-10">
-                        {{post.createtime}}
+                        {{reply.createtime}}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-2">
-                        最近更新时间
-                    </div>
-                    <div class="col-md-10">
-                        {{post.updatetime}}
-                    </div>
-                </div>
+
                 <div class="row">
                     <div class="col-md-2">
                         <button class="btn btn-info btn-sm right" v-on:click="showCreateReplyModal">创建新的回复</button>
@@ -92,21 +51,26 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(reply,index) in replyList">
-                    <td class="col-md-1">{{reply.replyId}}</td>
-                    <td class="col-md-1">{{reply.userName}}</td>
-                    <td class="col-md-6">{{reply.content}}<a style="cursor:pointer" v-on:click="navToLevel2Reply(reply.replyId)">{{reply.replyList.length}}条回复</a>
+                <tr v-for="(childReply,index) in reply.replyList">
+                    <td class="col-md-1">{{childReply.replyId}}</td>
+                    <td class="col-md-1">{{childReply.userName}}</td>
+                    <td class="col-md-6">{{childReply.content}}
+                        <div v-if="level==2">
+                            <a style="cursor:pointer" v-on:click="navToLevelReply(childReply.replyId)">
+                                {{childReply.replyList.length}}条回复
+                            </a>
+                        </div>
         </div>
         </td>
         <td class="col-md-1">
-            <div v-if="reply.anonymous==0">
+            <div v-if="childReply.anonymous==0">
                 非匿名
             </div>
-            <div v-if="reply.anonymous==1">
+            <div v-if="childReply.anonymous==1">
                 匿名
             </div>
         </td>
-        <td class="col-md-2">{{reply.createtime}}</td>
+        <td class="col-md-2">{{childReply.createtime}}</td>
         <td class="col-md-2">
             <button class="btn btn-info btn-sm right"
                     v-on:click="showUpdateReplyModal(index)">
@@ -145,7 +109,7 @@
                             </div>
                             <div class="form-group">
                                 <label>是否匿名</label>
-                                <select class="form-control" v-model="anonymous">
+                                <select class="form-control" v-model="addReply.anonymous">
                                     <option value="0">否</option>
                                     <option value="1">是</option>
                                 </select>
@@ -204,76 +168,39 @@
         </div>
     </div>
 
-    <div class="modal fade" id="longContentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    全部内容
-                </div>
-                <div class="modal-body">
-                    {{post.content}}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
-                    </button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
 </section>
 </@layout.mainLayout>
 <script type="text/javascript">
     var postDetail = new Vue({
-                el: "#postDetail",
+                el: "#level2ReplyDiv",
                 data: {
-                    postId: "",
-                    barId: "",
-                    anonymous: 0,
-                    post: {}
-                    ,
-                    addReply: {}
-                    ,
-                    updateReply: {}
-                    ,
-                    replyList: []
+                    replyId: "",
+                    addReply: {},
+                    updateReply: {},
+                    reply: {},
+                    level: 2
                 },
                 created: function () {
-                    this.postId = getQueryString("postId");
-                    this.barId = getQueryString("barId");
-                    this.getReplyList();
-                    this.getPostInfo();
+                    this.replyId = getQueryString("replyId");
+                    this.getReplyInfo();
+                    this.level = getQueryString("level");
                 }
                 ,
                 methods: {
-                    getReplyList: function () {
+                    getReplyInfo: function () {
                         var that = this;
                         $.ajax({
-                            url: "/reply/getReplyList",
+                            url: "/reply/getReply",
                             data: {
-                                postId: this.postId
+                                replyId: this.replyId
                             },
                             dataType: "json",
                             success: function (data) {
-                                that.replyList = data;
+                                that.reply = data;
                             }
                         })
                     }
-                    ,
-                    getPostInfo: function () {
-                        var that = this;
-                        $.ajax({
-                            url: "/post/getDetail",
-                            data: {
-                                postId: this.postId
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                that.post = data;
-                            }
-                        })
-                    }
+
                     ,
                     showCreateReplyModal: function () {
                         $("#createReplyModal").modal();
@@ -286,40 +213,40 @@
                             data: {
                                 userId: this.addReply.userId,
                                 content: this.addReply.content,
-                                postId: this.postId,
-                                barId: this.barId,
-                                anonymous: this.anonymous,
-                                lastReplyId: 0
+                                postId: this.reply.postId,
+                                barId: this.reply.barId,
+                                anonymous: this.addReply.anonymous,
+                                lastReplyId: this.replyId
                             },
                             type: "post",
                             dataType: "json",
                             success: function (data) {
                                 alert("创建成功");
                                 $("#createReplyModal").modal('hide');
-                                that.getReplyList();
+                                that.getReplyInfo();
                             }
                         })
 
                     }
                     ,
                     deleteReply: function (index) {
-                        var replyId = this.replyList[index].replyId;
+                        var replyId = this.reply.replyList[index].replyId;
                         var that = this;
                         $.ajax({
                             url: "/reply/delete",
                             data: {
                                 replyId: replyId,
-                                postId: this.postId
+                                postId: this.reply.postId
                             },
                             dataType: "json",
                             success: function (data) {
-                                that.replyList.splice(index, 1);
+                                that.reply.replyList.splice(index, 1);
                             }
                         })
                     }
                     ,
                     showUpdateReplyModal: function (index) {
-                        var replyId = this.replyList[index].replyId;
+                        var replyId = this.reply.replyList[index].replyId;
                         var that = this;
                         $("#updateReplyModal").modal();
                         $.ajax({
@@ -342,14 +269,15 @@
                                 replyId: this.updateReply.replyId,
                                 userId: this.updateReply.userId,
                                 content: this.updateReply.content,
-                                anonymous: this.updateReply.anonymous
+                                anonymous: this.updateReply.anonymous,
+
                             },
                             type: "post",
                             dataType: "json",
                             success: function (data) {
                                 alert("成功")
                                 $("#updateReplyModal").modal('hide')
-                                that.getReplyList()
+                                that.getReplyInfo()
                             }
                         })
                     }
@@ -358,8 +286,8 @@
                         $("#longContentModal").modal();
 
                     },
-                    navToLevel2Reply: function (replyId) {
-                        location.href = "/reply/detail?replyId=" + replyId + "&level=2";
+                    navToLevelReply: function (replyId) {
+                        location.href = "/reply/detail?replyId=" + replyId + "&level=3";
                     }
                 }
             })

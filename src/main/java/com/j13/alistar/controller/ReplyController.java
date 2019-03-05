@@ -14,6 +14,11 @@ public class ReplyController {
     @Autowired
     ReplyServerManager replyServerManager;
 
+    @RequestMapping("/detail")
+    public String detail() {
+        return "/reply/detail";
+    }
+
     @RequestMapping("/getReplyList")
     @ResponseBody
     public String getReplyList(@RequestParam(name = "postId") int postId) {
@@ -31,15 +36,17 @@ public class ReplyController {
     public String create(@RequestParam(name = "userId") int userId,
                          @RequestParam(name = "content") String content,
                          @RequestParam(name = "postId") int postId,
-                         @RequestParam(name = "barId") int barId) {
-        return JSON.toJSONString(replyServerManager.create(barId, postId, userId, content));
+                         @RequestParam(name = "barId") int barId,
+                         @RequestParam(name = "anonymous") int anonymous,
+                         @RequestParam(name = "lastReplyId") int lastReplyId) {
+        return JSON.toJSONString(replyServerManager.create(barId, postId, userId, content, anonymous, lastReplyId));
     }
 
     @RequestMapping("/delete")
     @ResponseBody
     public String delete(@RequestParam(name = "replyId") int replyId,
                          @RequestParam(name = "postId") int postId) {
-        return JSON.toJSONString(replyServerManager.delete(replyId,postId));
+        return JSON.toJSONString(replyServerManager.delete(replyId, postId));
 
     }
 
@@ -47,8 +54,9 @@ public class ReplyController {
     @ResponseBody
     public String update(@RequestParam(name = "replyId") int replyId,
                          @RequestParam(name = "userId") int userId,
-                         @RequestParam(name = "content") int content) {
-        return JSON.toJSONString(replyServerManager.update(replyId, userId, content));
+                         @RequestParam(name = "content") String content,
+                         @RequestParam(name = "anonymous") int anonymous) {
+        return JSON.toJSONString(replyServerManager.update(replyId, userId, content, anonymous));
     }
 
 }

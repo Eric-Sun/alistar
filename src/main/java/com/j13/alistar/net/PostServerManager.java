@@ -45,13 +45,15 @@ public class PostServerManager extends BaseServerManager {
         return data;
     }
 
-    public int create(String barId, int userId, String title, String content) {
+    public int create(String barId, int userId, String title, String content, int anonymous, int type) {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.add");
         params.put("barId", barId);
         params.put("userId", userId);
         params.put("content", content);
         params.put("title", title);
+        params.put("anonymous", anonymous);
+        params.put("type", type);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         AdminPostAddResp resp = JSON.parseObject(rawResponse, AdminPostAddResp.class);
@@ -88,12 +90,14 @@ public class PostServerManager extends BaseServerManager {
     }
 
     public void update(int postId,
-                       String content, String title) {
+                       String content, String title, int anonymous, int type) {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("act", "admin.post.updateContentAndTitle");
+        params.put("act", "admin.post.update");
         params.put("postId", postId);
         params.put("content", content);
         params.put("title", title);
+        params.put("anonymous", anonymous);
+        params.put("type", type);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
