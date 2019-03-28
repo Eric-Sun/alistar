@@ -43,7 +43,7 @@ public class PostController {
                          @RequestParam(name = "barId") String barId,
                          @RequestParam(name = "title") String title,
                          @RequestParam(name = "anonymous") int anonymous,
-                         @RequestParam(name = "anonymous") int type,
+                         @RequestParam(name = "type") int type,
                          Map<String, Object> model) {
         return JSON.toJSONString(postServerManager.create(barId, userId, title, content, anonymous,type));
 
