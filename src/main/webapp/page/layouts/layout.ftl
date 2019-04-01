@@ -222,6 +222,18 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="/bar/list"><i class="fa fa-circle-o"></i>BAR列表</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>审核</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="/audit/replyList"><i class="fa fa-circle-o"></i>回复审核</a></li>
                     </ul>
                 </li>
 
