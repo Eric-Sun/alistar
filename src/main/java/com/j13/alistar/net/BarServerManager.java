@@ -18,15 +18,15 @@ import java.util.Map;
 public class BarServerManager extends BaseServerManager {
 
 
-    public List<BarVO> barList(int pageNum) {
+    public List<BarVO> barList(int pageNum) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.bar.list");
         params.put("size", SIZE_PER_PAGE);
         params.put("pageNum", pageNum);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminBarListResp resp = JSON.parseObject(rawResponse, AdminBarListResp.class);
-
         List<BarVO> list = Lists.newLinkedList();
         for (AdminBarDetailResp r : resp.getData()) {
             BarVO a = new BarVO();
@@ -38,24 +38,26 @@ public class BarServerManager extends BaseServerManager {
     }
 
 
-    public int createBar(String barName, int userId) {
+    public int createBar(String barName, int userId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.bar.add");
         params.put("name", barName);
         params.put("userId", userId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminBarAddResp resp = JSON.parseObject(rawResponse, AdminBarAddResp.class);
         return resp.getBarId();
     }
 
 
-    public CommonResultResp delete(int barId) {
+    public CommonResultResp delete(int barId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.bar.delete");
         params.put("barId", barId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         return JSON.parseObject(rawResponse, CommonResultResp.class);
     }
 }

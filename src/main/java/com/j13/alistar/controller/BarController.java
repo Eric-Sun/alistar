@@ -2,6 +2,8 @@ package com.j13.alistar.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.j13.alistar.net.BarServerManager;
+import com.j13.alistar.net.RemoteServerErrorResponse;
+import com.j13.alistar.net.RemoteServerException;
 import com.j13.alistar.vos.BarVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +33,12 @@ public class BarController {
     @ResponseBody
     public String getBarList() {
         int pageNum = 0;
-        List<BarVO> barList = barServerManager.barList(pageNum);
+        List<BarVO> barList = null;
+        try {
+            barList = barServerManager.barList(pageNum);
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
         return JSON.toJSONString(barList);
     }
 
@@ -45,13 +52,22 @@ public class BarController {
     public String create(HttpServletRequest request,
                          @RequestParam(name = "name") String name,
                          @RequestParam(name = "userId") Integer userId) {
-        return JSON.toJSONString(barServerManager.createBar(name, userId));
+        try {
+            return JSON.toJSONString(barServerManager.createBar(name, userId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+
+        }
     }
 
     @RequestMapping("/delete")
     @ResponseBody
     public String delete(@RequestParam(name = "barId") Integer barId) {
-        return JSON.toJSONString(barServerManager.delete(barId));
+        try {
+            return JSON.toJSONString(barServerManager.delete(barId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
 

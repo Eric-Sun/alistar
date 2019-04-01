@@ -18,7 +18,7 @@ import java.util.Map;
 public class ReplyServerManager extends BaseServerManager {
 
 
-    public List<ReplyVO> list(int postId) {
+    public List<ReplyVO> list(int postId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.list");
         params.put("postId", postId);
@@ -26,6 +26,7 @@ public class ReplyServerManager extends BaseServerManager {
         params.put("pageNum", 0);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminReplyListResp resp = JSON.parseObject(rawResponse, AdminReplyListResp.class);
 
         List<ReplyVO> list = Lists.newLinkedList();
@@ -34,6 +35,7 @@ public class ReplyServerManager extends BaseServerManager {
             BeanUtils.copyProperties(a, r);
             a.setCreatetime(sdf.format(new Date(r.getCreatetime())));
             list.add(a);
+
 //            if (r.getReplyList().size() != 0) {
 //                for (AdminReplyDetailResp r2 : r.getReplyList()) {
 //                    ReplyVO a2 = new ReplyVO();
@@ -55,20 +57,29 @@ public class ReplyServerManager extends BaseServerManager {
         return list;
     }
 
-    public ReplyVO get(int replyId) {
+    public ReplyVO get(int replyId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.detail");
         params.put("replyId", replyId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminReplyDetailResp resp = JSON.parseObject(rawResponse, AdminReplyDetailResp.class);
         ReplyVO reply = new ReplyVO();
         BeanUtils.copyProperties(reply, resp);
         reply.setCreatetime(sdf.format(new Date(resp.getCreatetime())));
+
+//        for (int i = 0; i < resp.getReplyList().size(); i++) {
+//            AdminReplyDetailResp r2 = resp.getReplyList().get(i);
+//            ReplyVO a2 = new ReplyVO();
+//            BeanUtils.copyProperties(a2, r2);
+//            a2.setCreatetime(sdf.format(new Date(r2.getCreatetime())));
+//            reply.getReplyList().add(a2);
+//        }
         return reply;
     }
 
-    public Object create(int barId, int postId, int userId, String content, int anonymous, int lastReplyId) {
+    public Object create(int barId, int postId, int userId, String content, int anonymous, int lastReplyId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.add");
         params.put("postId", postId);
@@ -79,22 +90,24 @@ public class ReplyServerManager extends BaseServerManager {
         params.put("lastReplyId", lastReplyId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminReplyAddResp resp = JSON.parseObject(rawResponse, AdminReplyAddResp.class);
         return resp.getReplyId();
     }
 
-    public CommonResultResp delete(int replyId, int postId) {
+    public CommonResultResp delete(int replyId, int postId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.delete");
         params.put("replyId", replyId);
         params.put("postId", postId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
         return resp;
     }
 
-    public Object update(int replyId, int userId, String content, int anonymous) {
+    public Object update(int replyId, int userId, String content, int anonymous) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.update");
         params.put("replyId", replyId);
@@ -103,6 +116,7 @@ public class ReplyServerManager extends BaseServerManager {
         params.put("anonymous", anonymous);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
         return resp;
     }

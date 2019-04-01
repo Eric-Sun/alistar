@@ -285,6 +285,10 @@
                             },
                             type: "post",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("创建成功");
                                 $("#createPostModal").modal('hide');
                                 that.getPostList();
@@ -300,6 +304,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.postList = data.postList;
                                 that.barName = data.barName;
                             },
@@ -319,6 +327,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("成功");
                                 that.postList.splice(index, 1);
                             }
@@ -341,6 +353,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.updatePost = data;
                             }
                         })
@@ -363,6 +379,10 @@
                             type: "post",
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("更新成功")
                                 $("#updatePostModal").modal('hide');
                                 that.getPostList();
@@ -384,6 +404,10 @@
                             type: "post",
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("下线成功");
                                 that.getPostList();
                             }
@@ -400,6 +424,10 @@
                             type: "post",
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("上线成功");
                                 that.getPostList();
                             }
@@ -415,6 +443,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.postList = data;
                             },
                             error: function (data) {
@@ -432,6 +464,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.postList = data;
                             },
                             error: function (data) {

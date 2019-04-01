@@ -114,6 +114,10 @@
                             },
                             type: "post",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("创建成功");
                                 $("#createBarModal").modal('hide');
                                 tb.$options.methods.loadData();
@@ -139,6 +143,10 @@
                             url: "/bar/getBarList",
                             dataType: 'json',
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 Vue.set(tb, "barList", data);
                             }
                         })
@@ -157,6 +165,11 @@
                             },
                             dataType: 'json',
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
+
                                 _self.barList.splice(index, 1);
                                 alert("成功");
                             }

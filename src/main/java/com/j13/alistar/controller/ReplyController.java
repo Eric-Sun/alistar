@@ -1,6 +1,8 @@
 package com.j13.alistar.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.j13.alistar.net.RemoteServerErrorResponse;
+import com.j13.alistar.net.RemoteServerException;
 import com.j13.alistar.net.ReplyServerManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +24,21 @@ public class ReplyController {
     @RequestMapping("/getReplyList")
     @ResponseBody
     public String getReplyList(@RequestParam(name = "postId") int postId) {
-        return JSON.toJSONString(replyServerManager.list(postId));
+        try {
+            return JSON.toJSONString(replyServerManager.list(postId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
     @RequestMapping("/getReply")
     @ResponseBody
     public String getReply(@RequestParam(name = "replyId") int replyId) {
-        return JSON.toJSONString(replyServerManager.get(replyId));
+        try {
+            return JSON.toJSONString(replyServerManager.get(replyId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
     @RequestMapping("/create")
@@ -39,14 +49,22 @@ public class ReplyController {
                          @RequestParam(name = "barId") int barId,
                          @RequestParam(name = "anonymous") int anonymous,
                          @RequestParam(name = "lastReplyId") int lastReplyId) {
-        return JSON.toJSONString(replyServerManager.create(barId, postId, userId, content, anonymous, lastReplyId));
+        try {
+            return JSON.toJSONString(replyServerManager.create(barId, postId, userId, content, anonymous, lastReplyId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
     @RequestMapping("/delete")
     @ResponseBody
     public String delete(@RequestParam(name = "replyId") int replyId,
                          @RequestParam(name = "postId") int postId) {
-        return JSON.toJSONString(replyServerManager.delete(replyId, postId));
+        try {
+            return JSON.toJSONString(replyServerManager.delete(replyId, postId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
 
     }
 
@@ -56,7 +74,11 @@ public class ReplyController {
                          @RequestParam(name = "userId") int userId,
                          @RequestParam(name = "content") String content,
                          @RequestParam(name = "anonymous") int anonymous) {
-        return JSON.toJSONString(replyServerManager.update(replyId, userId, content, anonymous));
+        try {
+            return JSON.toJSONString(replyServerManager.update(replyId, userId, content, anonymous));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
 }

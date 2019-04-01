@@ -18,7 +18,7 @@ import java.util.Map;
 @Service
 public class PostServerManager extends BaseServerManager {
 
-    public Map<String, Object> list(int barId) {
+    public Map<String, Object> list(int barId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.list");
         params.put("barId", barId);
@@ -26,6 +26,7 @@ public class PostServerManager extends BaseServerManager {
         params.put("pageNum", 0);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminPostListResp resp = JSON.parseObject(rawResponse, AdminPostListResp.class);
         List<PostVO> list = Lists.newLinkedList();
         for (AdminPostDetailResp r : resp.getList()) {
@@ -45,7 +46,7 @@ public class PostServerManager extends BaseServerManager {
         return data;
     }
 
-    public int create(String barId, int userId, String title, String content, int anonymous, int type) {
+    public int create(String barId, int userId, String title, String content, int anonymous, int type) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.add");
         params.put("barId", barId);
@@ -56,41 +57,44 @@ public class PostServerManager extends BaseServerManager {
         params.put("type", type);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminPostAddResp resp = JSON.parseObject(rawResponse, AdminPostAddResp.class);
         return resp.getPostId();
     }
 
-    public CommonResultResp delete(int postId, int barId) {
+    public CommonResultResp delete(int postId, int barId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.delete");
         params.put("postId", postId);
         params.put("barId", barId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
         return resp;
     }
 
-    public PostVO detail(int postId) {
+    public PostVO detail(int postId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.detail");
         params.put("postId", postId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminPostDetailResp resp = JSON.parseObject(rawResponse, AdminPostDetailResp.class);
         PostVO a = new PostVO();
         BeanUtils.copyProperties(a, resp);
         a.setCreatetime(sdf.format(new Date(resp.getCreatetime())));
         a.setUpdatetime(sdf.format(new Date(resp.getUpdatetime())));
-        if (a.getContent().length() > 20) {
-            a.setShortContent(a.getContent().substring(0, 20));
+        if (a.getContent().length() > 200) {
+            a.setShortContent(a.getContent().substring(0, 200));
             a.setShowLongContent(true);
         }
         return a;
     }
 
     public void update(int postId,
-                       String content, String title, int anonymous, int type) {
+                       String content, String title, int anonymous, int type) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.update");
         params.put("postId", postId);
@@ -100,30 +104,33 @@ public class PostServerManager extends BaseServerManager {
         params.put("type", type);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
     }
 
-    public CommonResultResp online(int postId) {
+    public CommonResultResp online(int postId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.online");
         params.put("postId", postId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
         return resp;
     }
 
-    public CommonResultResp offline(int postId) {
+    public CommonResultResp offline(int postId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.offline");
         params.put("postId", postId);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         CommonResultResp resp = JSON.parseObject(rawResponse, CommonResultResp.class);
         return resp;
     }
 
-    public List<PostVO> queryTitle(int barId, int name) {
+    public List<PostVO> queryTitle(int barId, int name) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.queryTitle");
         params.put("barId", barId);
@@ -132,6 +139,7 @@ public class PostServerManager extends BaseServerManager {
         params.put("pageNum", 0);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminPostQueryTitleResp resp = JSON.parseObject(rawResponse, AdminPostQueryTitleResp.class);
         List<PostVO> list = Lists.newLinkedList();
         for (AdminPostDetailResp r : resp.getList()) {
@@ -148,7 +156,7 @@ public class PostServerManager extends BaseServerManager {
         return list;
     }
 
-    public List<PostVO> queryUserId(int barId, int userId) {
+    public List<PostVO> queryUserId(int barId, int userId) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.queryUserId");
         params.put("barId", barId);
@@ -157,6 +165,7 @@ public class PostServerManager extends BaseServerManager {
         params.put("pageNum", 0);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
         AdminPostQueryUserIdResp resp = JSON.parseObject(rawResponse, AdminPostQueryUserIdResp.class);
         List<PostVO> list = Lists.newLinkedList();
         for (AdminPostDetailResp r : resp.getList()) {

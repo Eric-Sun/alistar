@@ -24,7 +24,7 @@
                     <div class="col-md-2">
                         帖子内容
                     </div>
-                    <div v-if="showLongContent" class="col-md-10">
+                    <div v-if="post.showLongContent" class="col-md-10">
                         {{post.shortContent}}
                         <button class="btn btn-info btn-sm right"
                                 v-on:click="showLongContent()">
@@ -256,6 +256,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.replyList = data;
                             }
                         })
@@ -270,6 +274,11 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                console.log(JSON.stringify(data));
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.post = data;
                             }
                         })
@@ -294,6 +303,10 @@
                             type: "post",
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("创建成功");
                                 $("#createReplyModal").modal('hide');
                                 that.getReplyList();
@@ -313,6 +326,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.replyList.splice(index, 1);
                             }
                         })
@@ -329,6 +346,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.updateReply = data;
                             }
                         })
@@ -347,6 +368,10 @@
                             type: "post",
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("成功")
                                 $("#updateReplyModal").modal('hide')
                                 that.getReplyList()

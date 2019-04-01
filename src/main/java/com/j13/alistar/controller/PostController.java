@@ -2,6 +2,8 @@ package com.j13.alistar.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.j13.alistar.net.PostServerManager;
+import com.j13.alistar.net.RemoteServerErrorResponse;
+import com.j13.alistar.net.RemoteServerException;
 import com.j13.alistar.net.ReplyServerManager;
 import com.j13.alistar.vos.PostVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,12 @@ public class PostController {
     @RequestMapping("/getPostList")
     @ResponseBody
     public String getPostList(@RequestParam(name = "barId") int barId) {
-        Map<String, Object> data = postServerManager.list(barId);
+        Map<String, Object> data = null;
+        try {
+            data = postServerManager.list(barId);
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
         return JSON.toJSONString(data);
     }
 
@@ -45,7 +52,11 @@ public class PostController {
                          @RequestParam(name = "anonymous") int anonymous,
                          @RequestParam(name = "type") int type,
                          Map<String, Object> model) {
-        return JSON.toJSONString(postServerManager.create(barId, userId, title, content, anonymous,type));
+        try {
+            return JSON.toJSONString(postServerManager.create(barId, userId, title, content, anonymous,type));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
 
     }
 
@@ -53,7 +64,11 @@ public class PostController {
     @ResponseBody
     public String delete(@RequestParam(name = "postId") int postId,
                          @RequestParam(name = "barId") int barId) {
-        return JSON.toJSONString(postServerManager.delete(postId, barId));
+        try {
+            return JSON.toJSONString(postServerManager.delete(postId, barId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
     @RequestMapping("/preUpdate")
@@ -61,7 +76,12 @@ public class PostController {
                             @RequestParam(name = "barId") int barId,
                             Map<String, Object> model) {
 
-        PostVO vo = postServerManager.detail(postId);
+        PostVO vo = null;
+        try {
+            vo = postServerManager.detail(postId);
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
         model.put("post", vo);
         model.put("barId", barId);
         return "/post/update";
@@ -75,7 +95,11 @@ public class PostController {
             @RequestParam(name = "title") String title,
             @RequestParam(name = "anonymous") int anonymous,
             @RequestParam(name = "type") int type) {
-        postServerManager.update(postId, content, title,anonymous,type);
+        try {
+            postServerManager.update(postId, content, title,anonymous,type);
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
         return "{}";
     }
 
@@ -88,7 +112,12 @@ public class PostController {
     @RequestMapping("/getDetail")
     @ResponseBody
     public String getDetail(@RequestParam(name = "postId") int postId) {
-        PostVO post = postServerManager.detail(postId);
+        PostVO post = null;
+        try {
+            post = postServerManager.detail(postId);
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
         return JSON.toJSONString(post);
     }
 
@@ -96,27 +125,43 @@ public class PostController {
     @RequestMapping("/online")
     @ResponseBody
     public String online(@RequestParam(name = "postId") int postId) {
-        return JSON.toJSONString(postServerManager.online(postId));
+        try {
+            return JSON.toJSONString(postServerManager.online(postId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
     @RequestMapping("/offline")
     @ResponseBody
     public String offline(@RequestParam(name = "postId") int postId) {
-        return JSON.toJSONString(postServerManager.offline(postId));
+        try {
+            return JSON.toJSONString(postServerManager.offline(postId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
     @RequestMapping("/queryTitle")
     @ResponseBody
     public String queryTitle(@RequestParam(name = "barId") int barId,
                              @RequestParam(name = "name") int name) {
-        return JSON.toJSONString(postServerManager.queryTitle(barId, name));
+        try {
+            return JSON.toJSONString(postServerManager.queryTitle(barId, name));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
     @RequestMapping("/queryUserId")
     @ResponseBody
     public String queryUserId(@RequestParam(name = "barId") int barId,
                               @RequestParam(name = "userId") int userId) {
-        return JSON.toJSONString(postServerManager.queryUserId(barId, userId));
+        try {
+            return JSON.toJSONString(postServerManager.queryUserId(barId, userId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
     }
 
 }

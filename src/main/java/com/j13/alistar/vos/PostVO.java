@@ -9,7 +9,7 @@ public class PostVO {
     private String userName;
     private String updatetime;
     private String shortContent;
-    private boolean isShowLongContent = false;
+    private boolean showLongContent = false;
     private String title;
     private int status;
     private int anonymous;
@@ -48,11 +48,11 @@ public class PostVO {
     }
 
     public boolean isShowLongContent() {
-        return isShowLongContent;
+        return showLongContent;
     }
 
-    public void setShowLongContent(boolean isShowLongContent) {
-        this.isShowLongContent = isShowLongContent;
+    public void setShowLongContent(boolean showLongContent) {
+        this.showLongContent = showLongContent;
     }
 
     public String getShortContent() {

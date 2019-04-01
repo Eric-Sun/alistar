@@ -55,11 +55,9 @@
                     <td class="col-md-1">{{childReply.replyId}}</td>
                     <td class="col-md-1">{{childReply.userName}}</td>
                     <td class="col-md-6">{{childReply.content}}
-                        <div v-if="level==2">
-                            <a style="cursor:pointer" v-on:click="navToLevelReply(childReply.replyId)">
-                                {{childReply.replyList.length}}条回复
-                            </a>
-                        </div>
+                        <a style="cursor:pointer" v-on:click="navToLevelReply(childReply.replyId)">
+                            {{childReply.replyList.length}}条回复
+                        </a>
         </div>
         </td>
         <td class="col-md-1">
@@ -152,7 +150,7 @@
                         <div class="form-group">
                             <label>是否匿名</label>
                             <select class="form-control" v-model="updateReply.anonymous">
-                                <option value="0">否</option>
+                                <option value="0" selected="selected">否</option>
                                 <option value="1">是</option>
                             </select>
                         </div>
@@ -175,7 +173,7 @@
                 el: "#level2ReplyDiv",
                 data: {
                     replyId: "",
-                    addReply: {},
+                    addReply: {anonymous: 0},
                     updateReply: {},
                     reply: {},
                     level: 2
@@ -196,6 +194,11 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                console.log(JSON.stringify(data));
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 that.reply = data;
                             }
                         })
@@ -203,6 +206,9 @@
 
                     ,
                     showCreateReplyModal: function () {
+                        this.addReply.content = '';
+                        this.addReply.anonymous = 0;
+                        this.addReply.userId='';
                         $("#createReplyModal").modal();
                     }
                     ,
@@ -221,6 +227,10 @@
                             type: "post",
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("创建成功");
                                 $("#createReplyModal").modal('hide');
                                 that.getReplyInfo();
@@ -240,6 +250,11 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
+                                alert("成功")
                                 that.reply.replyList.splice(index, 1);
                             }
                         })
@@ -256,6 +271,11 @@
                             },
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
+                                alert("成功")
                                 that.updateReply = data;
                             }
                         })
@@ -275,6 +295,10 @@
                             type: "post",
                             dataType: "json",
                             success: function (data) {
+                                if (data.errCode != null) {
+                                    alert("失败,errCode=" + data.errCode);
+                                    return;
+                                }
                                 alert("成功")
                                 $("#updateReplyModal").modal('hide')
                                 that.getReplyInfo()
