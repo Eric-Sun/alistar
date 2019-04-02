@@ -1,5 +1,9 @@
 package com.j13.alistar.vos;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 public class PostVO {
     private int postId;
     private int barId;
@@ -14,6 +18,15 @@ public class PostVO {
     private int status;
     private int anonymous;
     private int type;
+    private List<LevelInfoVO> levelInfo = Lists.newLinkedList();
+
+    public List<LevelInfoVO> getLevelInfo() {
+        return levelInfo;
+    }
+
+    public void setLevelInfo(List<LevelInfoVO> levelInfo) {
+        this.levelInfo = levelInfo;
+    }
 
     public int getType() {
         return type;

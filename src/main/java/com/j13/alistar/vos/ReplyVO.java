@@ -15,6 +15,15 @@ public class ReplyVO {
     private int postId;
     private int barId;
     private List<ReplyVO> replyList = Lists.newLinkedList();
+    private List<LevelInfoVO> levelInfo = Lists.newLinkedList();
+
+    public List<LevelInfoVO> getLevelInfo() {
+        return levelInfo;
+    }
+
+    public void setLevelInfo(List<LevelInfoVO> levelInfo) {
+        this.levelInfo = levelInfo;
+    }
 
     public int getBarId() {
         return barId;

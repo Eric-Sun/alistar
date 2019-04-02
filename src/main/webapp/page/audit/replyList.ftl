@@ -49,9 +49,11 @@
     var postDetail = new Vue({
                 el: "#auditReplyList",
                 data: {
-                    replyList: {}
+                    replyList: {},
+                    barId: 0
                 },
                 created: function () {
+                    this.barId = getQueryString("barId");
                     this.getReplyList();
                 }
                 ,
@@ -61,7 +63,7 @@
                         $.ajax({
                             url: "/audit/getReplyList",
                             data: {
-                                barId: 1
+                                barId: this.barId
                             },
                             dataType: "json",
                             success: function (data) {

@@ -233,7 +233,7 @@
             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/audit/replyList"><i class="fa fa-circle-o"></i>回复审核</a></li>
+                        <li><a href="/audit/replyList?barId=12"><i class="fa fa-circle-o"></i>回复审核</a></li>
                     </ul>
                 </li>
 
