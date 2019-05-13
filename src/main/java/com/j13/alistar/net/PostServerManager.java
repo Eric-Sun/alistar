@@ -46,7 +46,7 @@ public class PostServerManager extends BaseServerManager {
         return data;
     }
 
-    public int create(String barId, int userId, String title, String content, int anonymous, int type) throws RemoteServerException {
+    public int create(String barId, int userId, String title, String content, int anonymous, int type, String imgList) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.add");
         params.put("barId", barId);
@@ -55,6 +55,7 @@ public class PostServerManager extends BaseServerManager {
         params.put("title", title);
         params.put("anonymous", anonymous);
         params.put("type", type);
+        params.put("imgList", imgList);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         tryParseError(rawResponse);
@@ -94,7 +95,7 @@ public class PostServerManager extends BaseServerManager {
     }
 
     public void update(int postId,
-                       String content, String title, int anonymous, int type) throws RemoteServerException {
+                       String content, String title, int anonymous, int type, String imgList) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.post.update");
         params.put("postId", postId);
@@ -102,6 +103,7 @@ public class PostServerManager extends BaseServerManager {
         params.put("title", title);
         params.put("anonymous", anonymous);
         params.put("type", type);
+        params.put("imgListStr", imgList);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         tryParseError(rawResponse);

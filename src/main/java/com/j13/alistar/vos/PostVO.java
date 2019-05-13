@@ -19,6 +19,15 @@ public class PostVO {
     private int anonymous;
     private int type;
     private List<LevelInfoVO> levelInfo = Lists.newLinkedList();
+    private List<ImgVO> imgList = Lists.newLinkedList();
+
+    public List<ImgVO> getImgList() {
+        return imgList;
+    }
+
+    public void setImgList(List<ImgVO> imgList) {
+        this.imgList = imgList;
+    }
 
     public List<LevelInfoVO> getLevelInfo() {
         return levelInfo;

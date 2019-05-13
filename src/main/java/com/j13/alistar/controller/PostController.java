@@ -51,9 +51,10 @@ public class PostController {
                          @RequestParam(name = "title") String title,
                          @RequestParam(name = "anonymous") int anonymous,
                          @RequestParam(name = "type") int type,
+                         @RequestParam(name = "imgList") String imgList,
                          Map<String, Object> model) {
         try {
-            return JSON.toJSONString(postServerManager.create(barId, userId, title, content, anonymous,type));
+            return JSON.toJSONString(postServerManager.create(barId, userId, title, content, anonymous, type, imgList));
         } catch (RemoteServerException e) {
             return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
         }
@@ -94,9 +95,10 @@ public class PostController {
             @RequestParam(name = "content") String content,
             @RequestParam(name = "title") String title,
             @RequestParam(name = "anonymous") int anonymous,
-            @RequestParam(name = "type") int type) {
+            @RequestParam(name = "type") int type,
+            @RequestParam(name="imgList") String imgList) {
         try {
-            postServerManager.update(postId, content, title,anonymous,type);
+            postServerManager.update(postId, content, title, anonymous, type,imgList);
         } catch (RemoteServerException e) {
             return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
         }

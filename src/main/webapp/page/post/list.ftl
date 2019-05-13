@@ -37,6 +37,7 @@
                                     <th>发帖人</th>
                                     <th>帖子标题</th>
                                     <th>帖子内容</th>
+                                    <th>附图</th>
                                     <th>帖子状态</th>
                                     <th>是否匿名</th>
                                     <th>帖子类型</th>
@@ -63,6 +64,12 @@
                                         <div v-else>
                                             <a style="cursor:pointer;"
                                                v-on:click="navToPostDetail(index)">{{post.content}}</a>
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div v-if="post.imgList.length==0">无图</div>
+                                        <div v-if="post.imgList.length!=0"><a @click.stop="showImgListModal(index)">{{post.imgList.length}}张图</a>
                                         </div>
                                     </td>
                                     <td>
@@ -178,7 +185,7 @@
                                             </li>
                                             <li v-for='(img, index) in imgs'>
                                                 <p class="img"><img :src="getObjectURL(img)"><a class="close"
-                                                                                                  @click="delImg(index)">×</a>
+                                                                                                @click="delImg(index)">×</a>
                                                 </p>
                                             </li>
                                         </ul>
@@ -196,6 +203,33 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="showImgListModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form @submit.prevent="createPostSubmit" method="post">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">显示附图</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group margin">
+                                <div v-for="(img,index) in showImgList" class="form-group form-inline">
+                                    <img :src="img.url">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
         <div class="modal fade" id="updatePostModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
@@ -239,15 +273,37 @@
                                 <div v-if="updatePost.type==0">故事贴</div>
                                 <div v-else>一日一记</div>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label">上传图片</label>
+                                <div class="control-form">
+                                    <p class="help-block">(建议图片格式为：JPEG/BMP/PNG/GIF，大小不超过5M，最多可上传4张)</p>
+                                    <ul class="upload-imgs">
+                                        <li v-if="updatePost.imgList.length>=4 ? false : true">
+                                            <input type="file" class="upload" @change="addImgForUpdate"
+                                                   ref="updateInputer"
+                                                   multiple accept="image/png,image/jpeg,image/gif,image/jpg"/>
+                                            <a class="add"><i class="iconfont icon-plus"></i>
+                                                <p>点击上传</p></a>
+                                        </li>
+                                        <li v-for='(img, index) in updatePost.imgList'>
+                                            <p class="img"><img :src="img.url"><a class="close"
+                                                                                  @click="delImgForUpdate(index)">×</a>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
 
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default">更新</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
+                            </button>
+                        </div>
+                    </form>
+
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-default">更新</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">关闭
-                    </button>
-                </div>
-                </form>
+
             </div>
         </div>
         </div>
@@ -364,17 +420,45 @@
                 type: "",
                 anonymous: "",
                 userId: "",
-                updatePost: {},
+                updatePost: {imgList: []},
                 longContent: "",
                 queryData: "",
                 formData: new FormData(),
-                imgs: []
+                imgs: [],
+                showImgList: [] // 附图modal中用到的对象
             },
             created: function () {
                 this.barId = getQueryString("barId");
                 this.getPostList();
             },
             methods: {
+                delImgForUpdate: function (index) {
+                    this.$delete(this.updatePost.imgList, index);
+                },
+                addImgForUpdate: function (event) {
+                    let inputDOM = this.$refs.updateInputer;
+                    // 通过DOM取文件数据
+                    this.fil = inputDOM.files;
+                    let oldLen = this.imgLen;
+                    let len = this.fil.length + oldLen;
+                    if (len > 4) {
+                        alert('最多可上传4张，您还可以上传' + (4 - oldLen) + '张');
+                        return false;
+                    }
+                    for (let i = 0; i < this.fil.length; i++) {
+                        let size = Math.floor(this.fil[i].size / 1024);
+                        if (size > 5 * 1024 * 1024) {
+                            alert('请选择5M以内的图片！');
+                            return false
+                        }
+                        // this.$set(this.imgs, this.imgs.length, this.imgs);
+                        this.uploadImage(this.fil[i], 1);
+                    }
+                },
+                showImgListModal: function (index) {
+                    this.showImgList = this.postList[index].imgList;
+                    $("#showImgListModal").modal();
+                },
                 addImg(event) {
                     let inputDOM = this.$refs.inputer;
                     // 通过DOM取文件数据
@@ -391,9 +475,8 @@
                             alert('请选择5M以内的图片！');
                             return false
                         }
-                        this.imgs.push(this.fil[i]);
                         // this.$set(this.imgs, this.imgs.length, this.imgs);
-                        this.uploadImage(this.fil[i]);
+                        this.uploadImage(this.fil[i], 0);
                     }
                 },
                 getObjectURL(file) {
@@ -410,9 +493,15 @@
                 delImg(index) {
                     this.$delete(this.imgs, index);
                 },
-                uploadImage( file) {
+                /**
+                 * 0 为添加，1为更新
+                 * @param file
+                 * @param type
+                 */
+                uploadImage(file, type) {
                     var formData = new FormData();
                     formData.append("file", file);
+                    var that = this;
                     $.ajax({
                         url: '/image/upload',
                         data: formData,
@@ -422,12 +511,23 @@
                         contentType: false,
                         processData: false,
                         success: function (data) {
-                            console.log(data);
+                            file.imgId = data.imgId;
+                            file.url = data.url;
+                            if (type == 0) {
+                                that.imgs.push(file);
+                            } else {
+                                that.updatePost.imgList.push(file);
+                            }
                         }
                     });
                 },
                 createPostSubmit: function () {
                     var that = this;
+                    console.log(this.imgs[0].imgId);
+                    var imgIdList = []
+                    for (var i = 0; i < this.imgs.length; i++) {
+                        imgIdList.push(this.imgs[i].imgId);
+                    }
                     $.ajax({
                         url: "/post/create",
                         data: {
@@ -436,7 +536,8 @@
                             userId: this.userId,
                             title: this.title,
                             anonymous: this.anonymous,
-                            type: this.type
+                            type: this.type,
+                            imgList: JSON.stringify(imgIdList)
                         },
                         type: "post",
                         success: function (data) {
@@ -516,6 +617,7 @@
                                 alert("失败,errCode=" + data.errCode);
                                 return;
                             }
+                            console.log(data);
                             that.updatePost = data;
                         }
                     })
@@ -528,6 +630,11 @@
                 ,
                 updatePostSubmit: function () {
                     var that = this;
+                    var imgIdList = []
+                    for (var i = 0; i < this.updatePost.imgList.length; i++) {
+                        imgIdList.push(this.updatePost.imgList[i].imgId);
+                    }
+                    console.log("aaa");
                     $.ajax({
                         url: "/post/update",
                         data: {
@@ -535,7 +642,8 @@
                             content: this.updatePost.content,
                             title: this.updatePost.title,
                             anonymous: this.updatePost.anonymous,
-                            type: this.updatePost.type
+                            type: this.updatePost.type,
+                            imgList: JSON.stringify(imgIdList)
                         },
                         type: "post",
                         dataType: "json",
@@ -547,6 +655,8 @@
                             alert("更新成功")
                             $("#updatePostModal").modal('hide');
                             that.getPostList();
+                            that.updatePost = new Object;
+                            that.updatePost.imgList = [];
                         }
                     })
                 }
