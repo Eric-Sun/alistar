@@ -15,6 +15,25 @@ public class ReplyVO {
     private int postId;
     private int barId;
     private List<ReplyVO> replyList = Lists.newLinkedList();
+    private int replyListSize;
+    private List<ImgVO> imgList = Lists.newLinkedList();
+
+    public List<ImgVO> getImgList() {
+        return imgList;
+    }
+
+    public void setImgList(List<ImgVO> imgList) {
+        this.imgList = imgList;
+    }
+
+    public int getReplyListSize() {
+        return replyListSize;
+    }
+
+    public void setReplyListSize(int replyListSize) {
+        this.replyListSize = replyListSize;
+    }
+
     private List<LevelInfoVO> levelInfo = Lists.newLinkedList();
 
     public List<LevelInfoVO> getLevelInfo() {

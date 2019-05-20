@@ -48,9 +48,10 @@ public class ReplyController {
                          @RequestParam(name = "postId") int postId,
                          @RequestParam(name = "barId") int barId,
                          @RequestParam(name = "anonymous") int anonymous,
-                         @RequestParam(name = "lastReplyId") int lastReplyId) {
+                         @RequestParam(name = "lastReplyId") int lastReplyId,
+                         @RequestParam(name = "imgListStr") String imgListStr) {
         try {
-            return JSON.toJSONString(replyServerManager.create(barId, postId, userId, content, anonymous, lastReplyId));
+            return JSON.toJSONString(replyServerManager.create(barId, postId, userId, content, anonymous, lastReplyId, imgListStr));
         } catch (RemoteServerException e) {
             return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
         }
@@ -73,9 +74,10 @@ public class ReplyController {
     public String update(@RequestParam(name = "replyId") int replyId,
                          @RequestParam(name = "userId") int userId,
                          @RequestParam(name = "content") String content,
-                         @RequestParam(name = "anonymous") int anonymous) {
+                         @RequestParam(name = "anonymous") int anonymous,
+                         @RequestParam(name = "imgListStr") String imgListStr) {
         try {
-            return JSON.toJSONString(replyServerManager.update(replyId, userId, content, anonymous));
+            return JSON.toJSONString(replyServerManager.update(replyId, userId, content, anonymous, imgListStr));
         } catch (RemoteServerException e) {
             return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
         }

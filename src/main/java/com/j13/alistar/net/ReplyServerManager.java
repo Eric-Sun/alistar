@@ -79,7 +79,7 @@ public class ReplyServerManager extends BaseServerManager {
         return reply;
     }
 
-    public Object create(int barId, int postId, int userId, String content, int anonymous, int lastReplyId) throws RemoteServerException {
+    public Object create(int barId, int postId, int userId, String content, int anonymous, int lastReplyId, String imgListStr) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.add");
         params.put("postId", postId);
@@ -88,6 +88,7 @@ public class ReplyServerManager extends BaseServerManager {
         params.put("anonymous", anonymous);
         params.put("barId", barId);
         params.put("lastReplyId", lastReplyId);
+        params.put("imgListStr", imgListStr);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         tryParseError(rawResponse);
@@ -107,13 +108,14 @@ public class ReplyServerManager extends BaseServerManager {
         return resp;
     }
 
-    public Object update(int replyId, int userId, String content, int anonymous) throws RemoteServerException {
+    public Object update(int replyId, int userId, String content, int anonymous, String imgListStr) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
         params.put("act", "admin.reply.update");
         params.put("replyId", replyId);
         params.put("userId", userId);
         params.put("content", content);
         params.put("anonymous", anonymous);
+        params.put("imgListStr", imgListStr);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         tryParseError(rawResponse);
