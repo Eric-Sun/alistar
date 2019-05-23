@@ -306,7 +306,6 @@
 
             </div>
         </div>
-        </div>
 
         <div class="modal fade" id="longContentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
@@ -523,7 +522,6 @@
                 },
                 createPostSubmit: function () {
                     var that = this;
-                    console.log(this.imgs[0].imgId);
                     var imgIdList = []
                     for (var i = 0; i < this.imgs.length; i++) {
                         imgIdList.push(this.imgs[i].imgId);
