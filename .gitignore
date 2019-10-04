@@ -5,3 +5,6 @@ lib/
 *.DS_Store
 *.jpg
 tmp/
+iview-admin/node_modules
+iview-admin/dest
+

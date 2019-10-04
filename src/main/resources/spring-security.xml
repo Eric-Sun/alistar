@@ -7,19 +7,20 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
     <http pattern="/static2/**" security="none"/>
-    <http pattern="/login" security="none"/>
+    <http pattern="/index.html" security="none"/>
+    <http pattern="/*.js" security="none"/>
 
     <http use-expressions="true" auto-config="true">
 
-        <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>
+<!--        <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>-->
 
         <form-login login-processing-url="/j_spring_security_check"
-                    login-page="/login"
+                    login-page="/index.html"
                     username-parameter="j_username"
                     password-parameter="j_password"
-                    default-target-url='/index' always-use-default-target="true"
+                    default-target-url='/index.html' always-use-default-target="true"
                     authentication-failure-url="/error"/>
-        <logout logout-url="/j_spring_security_logout" logout-success-url="/login"/>
+        <logout logout-url="/j_spring_security_logout" logout-success-url="/index.html"/>
         <csrf disabled="true"/>
 
         <custom-filter ref="myFilter" before="FILTER_SECURITY_INTERCEPTOR"></custom-filter>
