@@ -24,7 +24,7 @@
     <div class="login-box-body">
         <p class="login-box-msg">Sign in to start your session</p>
 
-        <form action="/j_spring_security_check" method="post">
+        <form action="j_spring_security_check" method="post">
             <div class="form-group has-feedback">
                 <input type="" name="j_username" class="form-control" placeholder="Email">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

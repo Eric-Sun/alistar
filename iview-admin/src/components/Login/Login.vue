@@ -6,16 +6,17 @@
     <div id="loginLayout" :style="{width:style.witdh+'px',height:style.height+'px'}">
         <div class="container">
             <section id="content">
-                <form action="" ref="loginFrom">
+                <form  action="/api/j_spring_security_check" method="post" ref="loginFrom">
                     <h1>明亿超市智能营销平台</h1>
                     <div>
-                        <input type="text" placeholder="用户名" required="" id="username" />
+                        <input type="text" placeholder="用户名" name="j_username" required="" id="username" />
                     </div>
                     <div>
-                        <input type="password" placeholder="密码" required="" id="password" />
+                        <input type="password" placeholder="密码" name="j_password" required="" id="password" />
                     </div>
                     <div>	
-                        <button type="button" @click="loginIn('loginFrom')">登录</button>
+<!--                        <button type="submit"  @click="loginIn('loginFrom')">登录</button>-->
+                        <button type="submit" >登录</button>
                         <!--<a href="#">Register</a>-->
                     </div>
                 </form><!-- form -->
