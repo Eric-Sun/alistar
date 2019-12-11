@@ -185,7 +185,7 @@
                                             </li>
                                             <li v-for='(img, index) in imgs'>
                                                 <p class="img"><img :src="getObjectURL(img)"><a class="close"
-                                                                                                @click="delImg(index)">×</a>
+                                                                                                pagingType                            @click="delImg(index)">×</a>
                                                 </p>
                                             </li>
                                         </ul>
