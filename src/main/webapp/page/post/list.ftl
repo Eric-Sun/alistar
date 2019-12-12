@@ -112,6 +112,19 @@
                                             </button>
                                         </div>
 
+                                        <div v-if="post.star==0">
+                                            <button class="btn btn-info btn-sm right"
+                                                    v-on:click="addStar(index)">
+                                                加入精华池
+                                            </button>
+                                        </div>
+                                        <div v-if="post.star==1">
+                                            <button class="btn btn-info btn-sm right"
+                                                   >
+                                                已加精
+                                            </button>
+                                        </div>
+
                                         <button class="btn btn-info btn-sm right"
                                                 v-on:click="showUpdatePostModal(index)">
                                             更新
@@ -185,7 +198,8 @@
                                             </li>
                                             <li v-for='(img, index) in imgs'>
                                                 <p class="img"><img :src="getObjectURL(img)"><a class="close"
-                                                                                                pagingType                            @click="delImg(index)">×</a>
+                                                                                                pagingType
+                                                                                                @click="delImg(index)">×</a>
                                                 </p>
                                             </li>
                                         </ul>
@@ -680,6 +694,27 @@
                                 return;
                             }
                             alert("下线成功");
+                            that.getPostList();
+                        }
+                    })
+                },
+                addStar: function (index) {
+                    var postId = this.postList[index].postId;
+                    var that = this;
+                    $.ajax({
+                        url: "/starPost/add",
+                        data: {
+                            postId: postId,
+                            value: 5
+                        },
+                        type: "post",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.errCode != null) {
+                                alert("失败,errCode=" + data.errCode);
+                                return;
+                            }
+                            alert("加精成功");
                             that.getPostList();
                         }
                     })

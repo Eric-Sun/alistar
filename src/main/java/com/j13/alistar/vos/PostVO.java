@@ -18,8 +18,17 @@ public class PostVO {
     private int status;
     private int anonymous;
     private int type;
+    private int star;
     private List<LevelInfoVO> levelInfo = Lists.newLinkedList();
     private List<ImgVO> imgList = Lists.newLinkedList();
+
+    public int getStar() {
+        return star;
+    }
+
+    public void setStar(int star) {
+        this.star = star;
+    }
 
     public List<ImgVO> getImgList() {
         return imgList;
