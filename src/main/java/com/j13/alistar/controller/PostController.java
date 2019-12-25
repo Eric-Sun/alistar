@@ -31,6 +31,12 @@ public class PostController {
         return "/post/list";
     }
 
+    @RequestMapping("/offlineList")
+    public String offlineList(HttpServletRequest request, Map<String, Object> model) {
+
+        return "/post/offlineList";
+    }
+
     @RequestMapping("/getPostList")
     @ResponseBody
     public String getPostList(@RequestParam(name = "barId") int barId) {
@@ -96,9 +102,9 @@ public class PostController {
             @RequestParam(name = "title") String title,
             @RequestParam(name = "anonymous") int anonymous,
             @RequestParam(name = "type") int type,
-            @RequestParam(name="imgList") String imgList) {
+            @RequestParam(name = "imgList") String imgList) {
         try {
-            postServerManager.update(postId, content, title, anonymous, type,imgList);
+            postServerManager.update(postId, content, title, anonymous, type, imgList);
         } catch (RemoteServerException e) {
             return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
         }
@@ -139,6 +145,16 @@ public class PostController {
     public String offline(@RequestParam(name = "postId") int postId) {
         try {
             return JSON.toJSONString(postServerManager.offline(postId));
+        } catch (RemoteServerException e) {
+            return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
+        }
+    }
+
+    @RequestMapping("/getOfflineList")
+    @ResponseBody
+    public String getOfflineList(@RequestParam(name = "barId") int barId) {
+        try {
+            return JSON.toJSONString(postServerManager.offlineList(barId));
         } catch (RemoteServerException e) {
             return JSON.toJSONString(new RemoteServerErrorResponse(e.getCode()));
         }

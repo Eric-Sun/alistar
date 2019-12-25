@@ -9,7 +9,7 @@
 
                 <div id="tb" class="box">
                     <div class="box-header">
-                        <h3 class="box-title">精华帖子列表</h3>
+                        <h3 class="box-title">已下线帖子列表</h3>
                     </div>
 
                     <!-- /.box-header -->
@@ -23,13 +23,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="(starPost,index) in starPostList">
-                                <td>{{starPost.postId}}</td>
-                                <td><a style="cursor:pointer;"
-                                       v-on:click="navToPostDetail(index)">{{starPost.title}}</a></td>
+                            <tr v-for="(post,index) in postList">
+                                <td>{{post.postId}}</td>
+                                <td>{{post.title}}</td>
                                 <td>
                                     <button class="btn btn-info btn-sm right"
-                                            v-on:click="deleteStarPost(index)">
+                                            v-on:click="onlinePost(index)">
                                         删除
                                     </button>
                                 </td>
@@ -54,7 +53,7 @@
     var tb = new Vue({
             el: "#tb",
             data: {
-                starPostList: [],
+                postList: [],
                 barId: 0
             },
             created: function () {
@@ -64,29 +63,29 @@
             methods: {
                 loadData: function () {
                     var _self = this;
+                    console.log(this.barId);
                     $.ajax({
-                        url: "/starPost/getStarPostList",
+                        url: "/post/getOfflineList",
+                        data: {
+                            barId: this.barId
+                        },
                         dataType: 'json',
                         success: function (data) {
                             if (data.errCode != null) {
                                 alert("失败,errCode=" + data.errCode);
                                 return;
                             }
-                            Vue.set(tb, "starPostList", data);
+                            Vue.set(tb, "postList", data);
                         }
                     })
                 },
-                navToPostDetail: function (index) {
-                    var postId = this.starPostList[index].postId;
-                    location.href = "/post/detail?postId=" + postId + "&barId=" + this.barId;
-                },
-                deleteStarPost: function (index) {
+                onlinePost: function (index) {
                     var _self = this;
-                    var willDeleteId = this.starPostList[index].id;
+                    var postId = this.postList[index].id;
                     $.ajax({
-                        url: "/starPost/delete",
+                        url: "/post/online",
                         data: {
-                            id: willDeleteId
+                            postId: postId
                         },
                         dataType: 'json',
                         success: function (data) {
@@ -95,7 +94,7 @@
                                 return;
                             }
 
-                            _self.starPostList.splice(index, 1);
+                            _self.postList.splice(index, 1);
                             alert("成功");
                         }
                     })

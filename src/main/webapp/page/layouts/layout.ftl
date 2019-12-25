@@ -234,7 +234,9 @@
                         </a>
                         <ul class="treeview-menu">
                             <li><a href="/audit/replyList?barId=12"><i class="fa fa-circle-o"></i>回复审核</a></li>
-                            <li><a href="/starPost/list"><i class="fa fa-circle-o"></i>精华帖子列表</a></li>
+                            <li><a href="/starPost/list?barId=12"><i class="fa fa-circle-o"></i>精华帖子列表</a></li>
+                            <li><a href="/post/offlineList?barId=12"><i class="fa fa-circle-o"></i>已下线帖子列表</a></li>
+
 
                         </ul>
                     </li>

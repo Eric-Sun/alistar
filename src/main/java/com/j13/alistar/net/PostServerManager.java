@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.j13.alistar.util.InternetUtil;
 import com.j13.alistar.vos.PostVO;
+import com.j13.alistar.vos.StarPostVO;
 import com.j13.poppy.core.CommonResultResp;
 import com.j13.poppy.util.BeanUtils;
 import com.j13.ryze.api.resp.*;
@@ -180,6 +181,24 @@ public class PostServerManager extends BaseServerManager {
                 a.setShowLongContent(true);
             }
             list.add(a);
+        }
+        return list;
+    }
+
+    public Object offlineList(int barId) throws RemoteServerException {
+
+        List<PostVO> list = Lists.newLinkedList();
+        Map<String, Object> params = Maps.newHashMap();
+        params.put("act", "admin.post.offlineList");
+        params.put("barId", barId);
+        String url = getServerUrl();
+        String rawResponse = InternetUtil.post(url, params);
+        tryParseError(rawResponse);
+        AdminPostOfflineListResp resp = JSON.parseObject(rawResponse, AdminPostOfflineListResp.class);
+        for (AdminPostDetailResp detailResp : resp.getData()) {
+            PostVO vo = new PostVO();
+            BeanUtils.copyProperties(vo, detailResp);
+            list.add(vo);
         }
         return list;
     }

@@ -21,20 +21,20 @@ public class StarPostServerManager extends BaseServerManager {
     public int add(int postId, int value) throws RemoteServerException {
 
         Map<String, Object> params = Maps.newHashMap();
-        params.put("act", "starPost.add");
+        params.put("act", "admin.starPost.add");
         params.put("postId", postId);
         params.put("value", value);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         tryParseError(rawResponse);
-        StarPostAddResp resp = JSON.parseObject(rawResponse, StarPostAddResp.class);
+        AdminStarPostAddResp resp = JSON.parseObject(rawResponse, AdminStarPostAddResp.class);
         return resp.getId();
     }
 
 
     public CommonResultResp delete(int id) throws RemoteServerException {
         Map<String, Object> params = Maps.newHashMap();
-        params.put("act", "starPost.delete");
+        params.put("act", "admin.starPost.delete");
         params.put("id", id);
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
@@ -47,12 +47,12 @@ public class StarPostServerManager extends BaseServerManager {
     public List<StarPostVO> list() throws RemoteServerException {
         List<StarPostVO> list = Lists.newLinkedList();
         Map<String, Object> params = Maps.newHashMap();
-        params.put("act", "starPost.list");
+        params.put("act", "admin.starPost.list");
         String url = getServerUrl();
         String rawResponse = InternetUtil.post(url, params);
         tryParseError(rawResponse);
-        StarPostListResp resp = JSON.parseObject(rawResponse, StarPostListResp.class);
-        for (StarPostDetailResp detailResp : resp.getData()) {
+        AdminStarPostListResp resp = JSON.parseObject(rawResponse, AdminStarPostListResp.class);
+        for (AdminStarPostDetailResp detailResp : resp.getData()) {
             StarPostVO vo = new StarPostVO();
             BeanUtils.copyProperties(vo, detailResp);
             list.add(vo);
