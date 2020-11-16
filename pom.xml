@@ -196,7 +196,7 @@
     </dependencyManagement>
     <properties>
         <config>dev</config>
-        <jetty.version>8.1.9.v20130131</jetty.version>
+        <jetty.version>9.4.34.v20201102</jetty.version>
     </properties>
     <build>
         <finalName>admin</finalName>
